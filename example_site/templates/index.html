@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class = "content">
+    <h1 style="text-align: center">Top Stories</h1>
+    {% if stories|length < 1 %}
+    <a href="/update/">Refresh stories</a>
+    {% else %}
+    <table>
+        <tr>
+            <th>Headline</th>
+            <th>Source</th>
+        </tr>
+    {% for story in stories %}
+        <tr>
+            <td><a href="{{ story.url }}"">{{ story.title }}</a></td>
+            <td>{{ story.source_name }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a href="/update/">Refresh stories</a>
+    {% endif %}
+</div>
+{% endblock %}
