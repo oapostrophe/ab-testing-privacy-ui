@@ -37,35 +37,53 @@ def index():
     stories = Story.query.order_by(Story.title).all()
     return render_template('index.html', stories=stories)
 
+def add_stories(source, max_stories):
+    """Get stories from specified NewsAPI source.  Convert into SQLalchemy 
+    ojects and add to specified limit of stories to database.
 
+    :param source: (str) "sources" argument for newsapi.
+    :param max_stories: (int) Maximum number of stories to store.
+    """
+
+    # Get stories from NewsAPI as dict
+    stories = newsapi.get_top_headlines(sources=source)
+
+    # Convert to SQLalchemy object and add to database, up to max_stories times
+    count = 0
+    for story in stories['articles']:
+        if count < max_stories:
+
+            # Convert to SQLalchemy object
+            db_model = Story(
+                source_name=story["source"]["name"],
+                author=story["author"], 
+                title=story["title"],
+                url=story["url"],
+                image_url=story["urlToImage"], 
+                published_at=story["publishedAt"])
+            db.session.add(db_model) # Add to database
+        count += 1
+
+    db.session.commit() # Commit database changes
 
 @app.route('/update/')
 def refresh_stories():
-    """Replace existing stories in DB, if any, with new ones"""
+    """Put new stories in database"""
 
-    # Delete old stories if needed
+    # Delete old stories in database if needed
     if db.session.query(Story).count() > 0:
         db.session.query(Story).delete()
         db.session.commit()
 
-    # Get new stories from NewsAPI
-    stories = newsapi.get_top_headlines()
-    print("got " + str(len(stories['articles'])) + " stories")
+    # Add 5 stories from each NewsAPI source
+    add_stories('vice-news', 3)
+    add_stories('the-washington-post', 3)
+    add_stories('usa-today', 3)
+    add_stories('cnn', 3)
+    add_stories('the-washington-times', 3)
+    add_stories('breitbart-news', 3)
 
-    # Turn each story into an SQLalchemy Story object
-    for story in stories['articles']:
-        db_model = Story(
-            source_name=story["source"]["name"],
-            author=story["author"], 
-            title=story["title"],
-            url=story["url"],
-            image_url=story["urlToImage"], 
-            published_at=story["publishedAt"])
-        db.session.add(db_model)
-    
-    # Commit db changes and redirect to home page
-    db.session.commit()
-    print("Stories updated successfully")
+    # Redirect to homepage
     return redirect('/')
 
 if __name__ == "__main__":
