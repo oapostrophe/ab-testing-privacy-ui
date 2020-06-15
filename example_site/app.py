@@ -3,14 +3,14 @@
 from flask import Flask, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 from newsapi import NewsApiClient
-
+from flask_migrate import Migrate
 
 # Initialize Flask, newsapi and database
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 newsapi = NewsApiClient(api_key = '85dd624eda284c998d1b3ba8ac0bb600')
-
+migrate = Migrate(app, db)
 
 class Story(db.Model):
     """Database object to store retrieved stories."""
@@ -21,6 +21,7 @@ class Story(db.Model):
     url = db.Column(db.String(100))
     image_url = db.Column(db.String(100))
     published_at = db.Column(db.String(100))
+    description = db.Column(db.String(200))
 
     def __repr__(self):
         return '<Story %r>' % self.id
@@ -34,7 +35,9 @@ def index():
         return redirect('/update/')
 
     # Display stories stored in database
-    stories = Story.query.order_by(Story.title).all()
+    stories = Story.query.all()
+    for story in stories:
+        print(story.description)
     return render_template('index.html', stories=stories)
 
 def add_stories(source, max_stories):
@@ -60,10 +63,10 @@ def add_stories(source, max_stories):
                 title=story["title"],
                 url=story["url"],
                 image_url=story["urlToImage"], 
-                published_at=story["publishedAt"])
+                published_at=story["publishedAt"],
+                description=story["description"])
             db.session.add(db_model) # Add to database
         count += 1
-
     db.session.commit() # Commit database changes
 
 @app.route('/update/')
@@ -82,6 +85,9 @@ def refresh_stories():
     add_stories('cnn', 3)
     add_stories('the-washington-times', 3)
     add_stories('breitbart-news', 3)
+    add_stories('al-jazeera-english', 3)
+    add_stories('bbc-news', 3)
+    add_stories('reuters', 3)
 
     # Redirect to homepage
     return redirect('/')
