@@ -67,6 +67,7 @@ def add_stories(source, max_stories):
         count += 1
     db.session.commit() # Commit database changes
 
+@app.route('/update/')
 def refresh_stories():
     """Put new stories in database"""
 
