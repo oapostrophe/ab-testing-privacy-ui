@@ -21,6 +21,7 @@ class Story(db.Model):
     url = db.Column(db.String(100))
     image_url = db.Column(db.String(100))
     published_at = db.Column(db.String(100))
+    description = db.Column(db.String(200))
 
     def __repr__(self):
         return '<Story %r>' % self.id
