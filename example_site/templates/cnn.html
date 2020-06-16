@@ -1,0 +1,105 @@
+{% extends 'base.html'%}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<style>
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: medium;
+    background-color: white;
+}
+table, td, th {
+    border: 1px solid black;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+li {
+  float: left;
+ }
+  
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+  
+  li a:hover:not(.active) {
+    background-color: #111;
+  }
+  
+  .active {
+    background-color: #4CAF50;
+  }
+  .column {
+    float: left;
+    width: 22%;
+    padding: 0 10px;
+  }
+
+  
+  /* Remove extra left and right margins, due to padding */
+  .row {margin: 0 -5px;}
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Responsive columns */
+  @media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+  
+  /* Style the counter cards */
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    background-color: #f1f1f1;
+    width:300px;
+    height:300px;
+  }
+
+</style>
+
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a class="active" href="/cnn/">CNN</a></li>
+    <li><a href="/vice/">Vice News</a></li>
+    <li><a href="/washingtonpost/">Washington Post</a></li>
+    <li><a href="/usatoday/">USA Today</a></li>
+  </ul>
+<div class = "content">
+    <h1 style="text-align: center">Top CNN Stories</h1>
+    {% if stories|length < 1 %}
+    <a href="/update/">Refresh stories</a>
+    {% else %}
+    <div class="row">
+        {% for story in stories %}
+        <div class="column">
+          <div class="card">
+            <div class = "card__face card__face--front"><figure><center><a href="{{ story.url }}" target="_blank"><img style="width:100%" src= {{ story.image_url }}></a></figure><figcaption>{{ story.title }}</figcaption></center></div>
+            <div class = "card__face card__face--front">'Hi'</div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    <a href="/update/">Refresh stories</a>
+    {% endif %}
+</div>
+{% endblock %}

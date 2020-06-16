@@ -1,28 +1,51 @@
 {% extends 'base.html'%}
 
 {% block head %}
-
+<link href="static\main1.css" rel="stylesheet" type="text/css" media="all">
 {% endblock %}
 
 {% block body %}
+<ul>
+    <li><a class="active" href="/">Home</a></li>
+    <li><a href="/cnn/">CNN</a></li>
+    <li><a href="/vice/">Vice News</a></li>
+    <li><a href="/washingtonpost/">Washington Post</a></li>
+    <li><a href="/usatoday/">USA Today</a></li>
+  </ul>
+  <div class="popup" onclick="myFunction()">Consent Notification!
+    <span class="popuptext" id="myPopup">Cookies</span>
+  </div>
 <div class = "content">
-    <h1 style="text-align: center">Top Stories</h1>
+    <h1 style="text-align: center">Trending Stories</h1>
     {% if stories|length < 1 %}
     <a href="/update/">Refresh stories</a>
     {% else %}
-    <table>
-        <tr>
-            <th style = "width: 100%">Headline</th>
-            <th>Source</th>
-        </tr>
-    {% for story in stories %}
-        <tr>
-            <td><figure><center><a href="{{ story.url }}"><img style="width:100%" src= {{ story.image_url }}></a></figure><figcaption>{{ story.title }}</figcaption></center></td>
-            <td>{{ story.source_name }} {{story.published_at}}</td>
-        </tr>
-    {% endfor %}
-    </table>
+    <div class="row">
+        {% for story in stories %}
+        <div class="column">
+          <div class="flip-card">
+          <div class = "flip-card-inner">
+          <div class="flip-card-front">
+            <figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption>{{ story.title }}</figcaption>
+            <p><strong>{{ story.source_name }}</strong><p>
+          </div>
+          <div class="flip-card-back">
+            <p><a href="{{ story.url }}" target="_blank">{{ story.title }}</a></p>
+          </div>
+        </div> 
+      </div>
+        </div>
+        {% endfor %}
+    </div>
     <a href="/update/">Refresh stories</a>
     {% endif %}
 </div>
+
+<script>
+  // When the user clicks on <div>, open the popup
+  function myFunction() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+  }
+  </script>
 {% endblock %}
