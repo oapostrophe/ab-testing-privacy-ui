@@ -32,12 +32,10 @@ def index():
     """Display homepage"""
     # Automatically update if database is empty
     if db.session.query(Story).count() == 0:
-        return redirect('/update/')
+        refresh_stories()
 
     # Display stories stored in database
     stories = Story.query.all()
-    for story in stories:
-        print(story.description)
     return render_template('index.html', stories=stories)
 
 def add_stories(source, max_stories):
@@ -69,7 +67,6 @@ def add_stories(source, max_stories):
         count += 1
     db.session.commit() # Commit database changes
 
-@app.route('/update/')
 def refresh_stories():
     """Put new stories in database"""
 
@@ -78,7 +75,7 @@ def refresh_stories():
         db.session.query(Story).delete()
         db.session.commit()
 
-    # Add 5 stories from each NewsAPI source
+    # Add 3 stories from each NewsAPI source
     add_stories('vice-news', 3)
     add_stories('the-washington-post', 3)
     add_stories('usa-today', 3)
@@ -88,6 +85,8 @@ def refresh_stories():
     add_stories('al-jazeera-english', 3)
     add_stories('bbc-news', 3)
     add_stories('reuters', 3)
+
+    print("Successfully updated!")
 
     # Redirect to homepage
     return redirect('/')
