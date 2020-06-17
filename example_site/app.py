@@ -3,14 +3,12 @@
 from flask import Flask, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 from newsapi import NewsApiClient
-from flask_migrate import Migrate
 
 # Initialize Flask, newsapi and database
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 newsapi = NewsApiClient(api_key = '85dd624eda284c998d1b3ba8ac0bb600')
-migrate = Migrate(app, db)
 
 class Story(db.Model):
     """Database object to store retrieved stories."""
