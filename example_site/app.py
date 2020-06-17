@@ -3,14 +3,26 @@
 from flask import Flask, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 from newsapi import NewsApiClient
-from flask_migrate import Migrate
+import time
 
 # Initialize Flask, newsapi and database
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 newsapi = NewsApiClient(api_key = '85dd624eda284c998d1b3ba8ac0bb600')
-migrate = Migrate(app, db)
+
+# Load time last updated from file
+try:
+    with open('last_updated.txt', "r") as file:
+        time_string = file.read()
+        file.close()
+        last_updated = int(float(time_string))
+        print("Last updated:")
+        print(last_updated)
+
+except:
+    last_updated = 0
+
 
 class Story(db.Model):
     """Database object to store retrieved stories."""
@@ -30,13 +42,16 @@ class Story(db.Model):
 @app.route('/')
 def index():
     """Display homepage"""
-    # Automatically update if database is empty
-    if db.session.query(Story).count() == 0:
+
+    # Automatically update if needed
+    if db.session.query(Story).count() == 0 \
+        or int(time.time()) - last_updated > 3600:
         refresh_stories()
 
     # Display stories stored in database
     stories = Story.query.all()
     return render_template('index.html', stories=stories)
+
 
 def add_stories(source, max_stories):
     """Get stories from specified NewsAPI source.  Convert into SQLalchemy 
@@ -65,12 +80,15 @@ def add_stories(source, max_stories):
                 description=story["description"])
             db.session.add(db_model) # Add to database
         count += 1
-    db.session.commit() # Commit database changes
+
+    # Commit database changes
+    db.session.commit()
+
 
 def refresh_stories():
     """Put new stories in database"""
 
-    # Delete old stories in database if needed
+    # Delete any old stories in database
     if db.session.query(Story).count() > 0:
         db.session.query(Story).delete()
         db.session.commit()
@@ -86,10 +104,13 @@ def refresh_stories():
     add_stories('bbc-news', 3)
     add_stories('reuters', 3)
 
-    print("Successfully updated!")
+    # Record time updated
+    global last_updated
+    last_updated = int(time.time())
+    with open("last_updated.txt", "w") as file:
+        file.write(str(last_updated))
+        file.close()
 
-    # Redirect to homepage
-    return redirect('/')
 
 if __name__ == "__main__":
     """Run dev server"""
