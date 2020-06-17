@@ -59,7 +59,12 @@ def add_stories(source, max_stories):
                 title=story["title"],
                 url=story["url"],
                 image_url=story["urlToImage"], 
-                published_at=story["publishedAt"])
+                published_at=story["publishedAt"],
+                description=story["description"])
+            print("headline:")
+            print(db_model.title)
+            print("description:")
+            print(db_model.description)
             db.session.add(db_model) # Add to database
         count += 1
     db.session.commit() # Commit database changes
