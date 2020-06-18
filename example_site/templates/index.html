@@ -5,47 +5,64 @@
 {% endblock %}
 
 {% block body %}
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+  window.cookieconsent.initialise({
+    container: document.getElementById("cookieconsent"),
+    palette:{
+     popup: {background: "#1aa3ff"},
+     button: {background: "#e0e0e0"},
+    },
+    revokable: true,
+    onStatusChange: function(status) {
+     console.log(this.hasConsented() ?
+      'enable cookies' : 'disable cookies');
+    },
+    "position": "bottom-left",
+    "theme": "classic",
+    "domain": "https://i71n4.csb.app/",
+    "secure": true,
+    "content": {
+      "header": 'Cookies used on the website!',
+      "message": 'This website uses cookies to improve your experience.',
+      "dismiss": 'Got it!',
+      "allow": 'Allow cookies',
+      "deny": 'Decline',
+      "link": 'Learn more',
+      "href": 'https://www.cookiesandyou.com',
+      "close": '&#x274c;',
+      "policy": 'Cookie Policy',
+      "target": '_blank',
+      }
+   });
+
+</script>
+<script src="src/index.js"></script>
+
 <ul>
     <li><a class="active" href="/">Home</a></li>
-    <li><a href="/cnn/">CNN</a></li>
-    <li><a href="/vice/">Vice News</a></li>
-    <li><a href="/washingtonpost/">Washington Post</a></li>
-    <li><a href="/usatoday/">USA Today</a></li>
+    <li><a href="/left/">Left-Wing</a></li>
+    <li><a href="/neutral/">Neutral</a></li>
+    <li><a href="/right/">Right-Wing</a></li>
+    <li><a href="/international/">International</a></li>
   </ul>
-  <div class="popup" onclick="myFunction()">Consent Notification!
-    <span class="popuptext" id="myPopup">Cookies</span>
-  </div>
 <div class = "content">
     <h1 style="text-align: center">Trending Stories</h1>
     {% if stories|length < 1 %}
-    <a href="/update/">Refresh stories</a>
+    <a href="/">Refresh stories</a>
     {% else %}
     <div class="row">
-        {% for story in stories %}
-        <div class="column">
-          <div class="flip-card">
-          <div class = "flip-card-inner">
-          <div class="flip-card-front">
-            <figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption>{{ story.title }}</figcaption>
-            <p><strong>{{ story.source_name }}</strong><p>
-          </div>
-          <div class="flip-card-back">
-            <p><a href="{{ story.url }}" target="_blank">{{ story.description }}</a></p>
-          </div>
-        </div> 
-      </div>
+      {% for story in stories %}
+      <div class="column">
+         <div class="card">
+          <h3><center><strong>{{ story.source_name }}</strong></center></h3>
+          <div class="div1"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
+          <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
         </div>
-        {% endfor %}
+      </div>
+      {% endfor %}
     </div>
-    <a href="/update/">Refresh stories</a>
+    <a href="/">Refresh stories</a>
     {% endif %}
 </div>
-
-<script>
-  // When the user clicks on <div>, open the popup
-  function myFunction() {
-    var popup = document.getElementById("myPopup");
-    popup.classList.toggle("show");
-  }
-  </script>
 {% endblock %}
