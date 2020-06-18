@@ -78,6 +78,10 @@ def add_stories(source, max_stories):
                 image_url=story["urlToImage"], 
                 published_at=story["publishedAt"],
                 description=story["description"])
+            print("headline:")
+            print(db_model.title)
+            print("description:")
+            print(db_model.description)
             db.session.add(db_model) # Add to database
         count += 1
 
@@ -110,7 +114,6 @@ def refresh_stories():
     with open("last_updated.txt", "w") as file:
         file.write(str(last_updated))
         file.close()
-
 
 if __name__ == "__main__":
     """Run dev server"""
