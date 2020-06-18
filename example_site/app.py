@@ -17,12 +17,9 @@ try:
         time_string = file.read()
         file.close()
         last_updated = int(float(time_string))
-        print("Last updated:")
-        print(last_updated)
 
 except:
     last_updated = 0
-
 
 class Story(db.Model):
     """Database object to store retrieved stories."""
@@ -36,21 +33,46 @@ class Story(db.Model):
     description = db.Column(db.String(200))
 
     def __repr__(self):
-        return '<Story %r>' % self.id
+        return "<Story %r>" % self.id
 
 
 @app.route('/')
 def index():
     """Display homepage"""
+    stories = get_stories()
+    return render_template('index.html', stories=stories, 
+                            title="Trending Stories")
 
-    # Automatically update if needed
+@app.route('/international/')
+def international():
+    """Display international sources"""
+    stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
+    return render_template('index.html', stories=stories,
+                             title="International Coverage")
+
+def get_stories(sources=None):
+    """Get stories from specified sources.
+
+    :param stories: (array) Array of strings containing Story.source_name 
+    values by which to filter database. Default value None will display all
+    stories.
+    """
+
+    # Automatically update database if needed
     if db.session.query(Story).count() == 0 \
         or int(time.time()) - last_updated > 3600:
         refresh_stories()
-
-    # Display stories stored in database
-    stories = Story.query.all()
-    return render_template('index.html', stories=stories)
+    
+    # Display all stories if given default sources value
+    if sources == None:
+         return Story.query.all()
+    
+    # Display stories from specified sources
+    stories = []
+    for source in sources:
+        source_stories = Story.query.filter_by(source_name=source).all()
+        stories.extend(source_stories)
+    return stories
 
 
 def add_stories(source, max_stories):
@@ -78,10 +100,6 @@ def add_stories(source, max_stories):
                 image_url=story["urlToImage"], 
                 published_at=story["publishedAt"],
                 description=story["description"])
-            print("headline:")
-            print(db_model.title)
-            print("description:")
-            print(db_model.description)
             db.session.add(db_model) # Add to database
         count += 1
 
