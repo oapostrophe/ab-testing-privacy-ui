@@ -1,6 +1,7 @@
 {% extends 'base.html'%}
 
 {% block head %}
+
 {% endblock %}
 
 {% block body %}
@@ -9,28 +10,25 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: medium;
     background-color: white;
-}
-table, td, th {
-    border: 1px solid black;
-}
-ul {
+  }
+  ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
   }
-li {
+  li {
   float: left;
- }
+  }
   
-li a {
+  li a {
   display: block;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-}
+  }
   
   li a:hover:not(.active) {
     background-color: #111;
@@ -44,7 +42,7 @@ li a {
     width: 22%;
     padding: 0 10px;
   }
-
+  
   
   /* Remove extra left and right margins, due to padding */
   .row {margin: 0 -5px;}
@@ -68,38 +66,52 @@ li a {
   /* Style the counter cards */
   .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    padding: 16px;
+    padding: 10px;
     text-align: center;
     background-color: #f1f1f1;
     width:300px;
-    height:300px;
+    height:400px;
   }
-
-</style>
-
+  .div1 a:link {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+.div1 a:hover {
+  color: blue;
+  background-color: transparent;
+  text-decoration: underline;
+}
+.div1 a:visited {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+  </style>
 <ul>
     <li><a href="/">Home</a></li>
-    <li><a class="active" href="/cnn/">CNN</a></li>
-    <li><a href="/vice/">Vice News</a></li>
-    <li><a href="/washingtonpost/">Washington Post</a></li>
-    <li><a href="/usatoday/">USA Today</a></li>
+    <li><a href="/left/">Left-Wing</a></li>
+    <li><a class="active" href="/center/">Center</a></li>
+    <li><a href="/right/">Right-Wing</a></li>
+    <li><a href="/international/">International</a></li>
   </ul>
 <div class = "content">
-    <h1 style="text-align: center">Top CNN Stories</h1>
+    <h1 style="text-align: center">Center View Stories</h1>
     {% if stories|length < 1 %}
-    <a href="/update/">Refresh stories</a>
+    <a href="/">Refresh stories</a>
     {% else %}
     <div class="row">
-        {% for story in stories %}
-        <div class="column">
-          <div class="card">
-            <div class = "card__face card__face--front"><figure><center><a href="{{ story.url }}" target="_blank"><img style="width:100%" src= {{ story.image_url }}></a></figure><figcaption>{{ story.title }}</figcaption></center></div>
-            <div class = "card__face card__face--front">'Hi'</div>
-          </div>
+      {% for story in stories %}
+      <div class="column">
+         <div class="card">
+          <h3><center><strong>{{ story.source_name }}</strong></center></h3>
+          <div class="div1"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
+          <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
         </div>
-        {% endfor %}
+      </div>
+      {% endfor %}
     </div>
-    <a href="/update/">Refresh stories</a>
+    <a href="/">Refresh stories</a>
     {% endif %}
 </div>
 {% endblock %}

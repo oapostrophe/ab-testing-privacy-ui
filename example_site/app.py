@@ -105,14 +105,14 @@ def get_left_stories(sources=None):
         stories.extend(source_stories)
     return stories
 
-@app.route('/neutral/')
-def neutral():
-    """Display neutral sources"""
+@app.route('/center/')
+def center():
+    """Display center sources"""
     stories = get_stories(sources = ["USA Today", "CNN"])
-    return render_template('neutral.html', stories=stories,
-                             title="Neutral Coverage")
+    return render_template('center.html', stories=stories,
+                             title="Center Coverage")
 
-def get_neutral_stories(sources=None):
+def get_center_stories(sources=None):
     """Get stories from specified sources.
 
     :param stories: (array) Array of strings containing Story.source_name 

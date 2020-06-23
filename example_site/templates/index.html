@@ -5,44 +5,10 @@
 {% endblock %}
 
 {% block body %}
-<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
-<script>
-  window.cookieconsent.initialise({
-    container: document.getElementById("cookieconsent"),
-    palette:{
-     popup: {background: "#1aa3ff"},
-     button: {background: "#e0e0e0"},
-    },
-    revokable: true,
-    onStatusChange: function(status) {
-     console.log(this.hasConsented() ?
-      'enable cookies' : 'disable cookies');
-    },
-    "position": "bottom-left",
-    "theme": "classic",
-    "domain": "https://i71n4.csb.app/",
-    "secure": true,
-    "content": {
-      "header": 'Cookies used on the website!',
-      "message": 'This website uses cookies to improve your experience.',
-      "dismiss": 'Got it!',
-      "allow": 'Allow cookies',
-      "deny": 'Decline',
-      "link": 'Learn more',
-      "href": 'https://www.cookiesandyou.com',
-      "close": '&#x274c;',
-      "policy": 'Cookie Policy',
-      "target": '_blank',
-      }
-   });
-
-</script>
-<script src="src/index.js"></script>
-
 <ul>
     <li><a class="active" href="/">Home</a></li>
     <li><a href="/left/">Left-Wing</a></li>
-    <li><a href="/neutral/">Neutral</a></li>
+    <li><a href="/center/">Center</a></li>
     <li><a href="/right/">Right-Wing</a></li>
     <li><a href="/international/">International</a></li>
   </ul>
@@ -63,6 +29,28 @@
       {% endfor %}
     </div>
     <a href="/">Refresh stories</a>
+    <div id = "notification" class ="cookie-banner-container">
+      <p>
+        This website uses cookies.
+      </p>
+      <p>
+        Please look at our cookie policies.
+      </p>
+      <button type="button" onclick="myFunction()">
+        I agree.
+      </button>
+    </div>
+    <script>
+      function myFunction() {
+      var x = document.getElementById("notification");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } 
+      else {
+        x.style.display = "none";
+      }
+      }
+    </script>
     {% endif %}
 </div>
 {% endblock %}
