@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% block head %}
-<link href={{ url_for('static', filename = 'main1.css') }} rel="stylesheet" type="text/css" media="all">
+<link href={{ url_for('static', filename = 'css/main1.css') }} rel="stylesheet" type="text/css" media="all">
 {% endblock %}
 
 {% block body %}
@@ -9,8 +9,7 @@
     <li><a href="/">Home</a></li>
     <li><a href="/international/">International</a></li>
   </ul>
-  <div class="popup" onclick="myFunction()">Consent Notification!
-    <span class="popuptext" id="myPopup">Cookies</span>
+  <div onclick="logClick('consent_notification');">Consent Notification!
   </div>
 <div class = "content">
     <h1 style="text-align: center">{{ title }}</h1>
@@ -32,12 +31,22 @@
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script="{{ url_for('static', filename='js/jquery-3.5.1.js') }}"></script>
 
 <script>
-  // When the user clicks on <div>, open the popup
-  function myFunction() {
-    var popup = document.getElementById("myPopup");
-    popup.classList.toggle("show");
+  function logClick(element_id) {
+    fetch(`${window.location}`, {
+      method: "POST",
+      credentials: "include",
+      body: element_id,
+      cache: 'no-cache',
+      headers: new Headers({
+        'content-type': 'application/json'
+      })
+    });
   }
-  </script>
+</script>
 {% endblock %}

@@ -1,9 +1,10 @@
 """Basic webapp to display top news stories with NewsAPI"""
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from newsapi import NewsApiClient
-import time
+import time, hashlib
+from userdata import Event
 
 # Initialize Flask, newsapi and database
 app = Flask(__name__)
@@ -11,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 newsapi = NewsApiClient(api_key = '85dd624eda284c998d1b3ba8ac0bb600')
 
-# Load time last updated from file
+# Load time stories were last updated from file
 try:
     with open('last_updated.txt', "r") as file:
         time_string = file.read()
@@ -20,6 +21,9 @@ try:
 
 except:
     last_updated = 0
+
+# Initialize array for logging page visit data in memory
+events = []
 
 class Story(db.Model):
     """Database object to store retrieved stories."""
@@ -36,12 +40,49 @@ class Story(db.Model):
         return "<Story %r>" % self.id
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    """Display homepage"""
-    stories = get_stories()
-    return render_template('index.html', stories=stories, 
-                            title="Trending Stories")
+    """Display homepage, and log user events"""
+
+    # Log data from POST request upon user click
+    if request.method == "POST":
+        timestamp = time.time()
+        event_type = str(request.data)[2:-1]
+        log_event(events, request, timestamp, event_type)
+        response = make_response(jsonify({"message" : "event logged"}), 200)
+        return response
+    
+    # Display home page and log user opening page
+    else:
+        timestamp = time.time()
+        log_event(events, request, timestamp, "page_open")
+        stories = get_stories()
+        return render_template('index.html', stories=stories, 
+                                title="Trending Stories")
+
+def log_event(events, request, timestamp, event_type):
+    """Log interaction during page visit received through POST request
+    
+    :param events: (list) Current events list in memory, to be appended
+    :param timestamp: (int) Request timestamp as Unix int
+    :param request: Flask request object
+    """
+    # Get IP and convert to string
+    ip = str(request.remote_addr)[2:-1]
+    ip = ip.encode()
+
+    # Hash IP into user ID
+    user_id = hashlib.sha256(ip).hexdigest()
+
+    # Get element_id if event is a click
+    if event_type == "click":
+        element_id = str(request.data)[2:-1]
+    else:
+        element_id = None
+
+    # Add to events log
+    events.append(Event(user_id, timestamp, event_type, element_id))
+
 
 @app.route('/international/')
 def international():
@@ -135,4 +176,11 @@ def refresh_stories():
 
 if __name__ == "__main__":
     """Run dev server"""
+
+    # Run server
     app.run(debug=True)
+
+    # Store current session id
+    with open("next_session_id.txt", "w") as file:
+        file.write(str(next_session_id))
+        file.close()
