@@ -1,5 +1,6 @@
 venv
 scratchcode.py
 last_updated.txt
+data_log.csv
 /example_site/test.db
 /example_site/migrations/*

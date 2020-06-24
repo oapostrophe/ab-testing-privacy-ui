@@ -7,6 +7,32 @@
 </head>
 <body>
     {% block body %}{% endblock %}
-    {% block script %}{%endblock %}
+    <script>
+        // Set page to log when unloading
+         // Currently broken window.addEventListener('unload', logEvent("page_close"));
+      
+        // Send a POST request to server logging a click or page close.
+        // Takes parameters event_type "click" or "page_close", and 
+        // optional element_id 
+        function logEvent(event_type, element_id="none") {
+      
+          // Compile parameters into JSON object
+          var data = {
+            event_type: event_type,
+            element_id : element_id
+          };
+      
+          // Send POST request to backend
+          fetch(`${window.location}`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(data),
+            cache: 'no-cache',
+            headers: new Headers({
+              'content-type': 'application/json'
+            })
+          });
+        }
+      </script>
 </body>
 </html

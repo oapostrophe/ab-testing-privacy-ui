@@ -3,7 +3,7 @@
 from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from newsapi import NewsApiClient
-import time, hashlib
+import time, hashlib, json, csv
 from userdata import Event
 
 # Initialize Flask, newsapi and database
@@ -47,8 +47,14 @@ def index():
     # Log data from POST request upon user click
     if request.method == "POST":
         timestamp = time.time()
-        event_type = str(request.data)[2:-1]
-        log_event(events, request, timestamp, event_type)
+        data = request.get_json()
+        print(data["event_type"])
+        log_event(events, request, timestamp, data["event_type"], 
+                    data["element_id"])
+        
+        # Code printing events for test
+        for event in events:
+            print(event)
         response = make_response(jsonify({"message" : "event logged"}), 200)
         return response
     
@@ -56,11 +62,21 @@ def index():
     else:
         timestamp = time.time()
         log_event(events, request, timestamp, "page_open")
+        print("page_open")
+        for event in events:
+            print(event)
         stories = get_stories()
         return render_template('index.html', stories=stories, 
                                 title="Trending Stories")
 
-def log_event(events, request, timestamp, event_type):
+@app.route('/international/')
+def international():
+    """Display international sources"""
+    stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
+    return render_template('index.html', stories=stories,
+                             title="International Coverage")
+
+def log_event(events, request, timestamp, event_type, element_id=None):
     """Log interaction during page visit received through POST request
     
     :param events: (list) Current events list in memory, to be appended
@@ -74,22 +90,8 @@ def log_event(events, request, timestamp, event_type):
     # Hash IP into user ID
     user_id = hashlib.sha256(ip).hexdigest()
 
-    # Get element_id if event is a click
-    if event_type == "click":
-        element_id = str(request.data)[2:-1]
-    else:
-        element_id = None
-
     # Add to events log
     events.append(Event(user_id, timestamp, event_type, element_id))
-
-
-@app.route('/international/')
-def international():
-    """Display international sources"""
-    stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
-    return render_template('index.html', stories=stories,
-                             title="International Coverage")
 
 def get_stories(sources=None):
     """Get stories from specified sources.
@@ -150,7 +152,7 @@ def add_stories(source, max_stories):
 
 def refresh_stories():
     """Put new stories in database"""
-
+    print("refreshing stories")
     # Delete any old stories in database
     if db.session.query(Story).count() > 0:
         db.session.query(Story).delete()
@@ -176,11 +178,27 @@ def refresh_stories():
 
 if __name__ == "__main__":
     """Run dev server"""
-
-    # Run server
     app.run(debug=True)
-
-    # Store current session id
-    with open("next_session_id.txt", "w") as file:
-        file.write(str(next_session_id))
+    
+    # Check if csv file already exists
+    try:
+        file = open("data_log.csv", "r")
         file.close()
+
+    # Create file and headers if not present
+    except:
+        file = open("data_log.csv", "w", newline = '')
+        heading_writer = csv.writer(file, delimiter=',', quotechar='"',
+                                    quoting = csv.QUOTE_ALL)
+        heading_writer.writerow(['user_id', 'timestamp', 'event_type',
+                                 'element_id'])
+        file.close()
+
+    # 
+    with open("data_log.csv", "a", newline='') as file:
+        writer = csv.writer(file, delimiter = ',', quotechar = '"',
+                    quoting = csv.QUOTE_ALL)
+        for event in events:
+            row = [event.user_id, event.timestamp, event.event_type,
+                    event.element_id]
+            writer.writerow(row)
