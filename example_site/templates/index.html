@@ -6,29 +6,46 @@
 
 {% block body %}
 <ul>
-    <li><a href="/">Home</a></li>
+    <li><a class="active" href="/">Home</a></li>
+    <li><a href="/left/">Left-Wing</a></li>
+    <li><a href="/center/">Center</a></li>
+    <li><a href="/right/">Right-Wing</a></li>
     <li><a href="/international/">International</a></li>
   </ul>
-  <div onclick="logEvent('click', 'consent_notification');">Consent Notification!
-  </div>
 <div class = "content">
-    <h1 style="text-align: center">{{ title }}</h1>
+    <h1 style="text-align: center">Trending Stories</h1>
     <div class="row">
-        {% for story in stories %}
-        <div class="column">
-          <div class="flip-card">
-          <div class = "flip-card-inner">
-          <div class="flip-card-front">
-            <figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption>{{ story.title }}</figcaption>
-            <p><strong>{{ story.source_name }}</strong><p>
-          </div>
-          <div class="flip-card-back">
-            <p><a href="{{ story.url }}" target="_blank">{{ story.description }}</a></p>
-          </div>
-        </div> 
-      </div>
+      {% for story in stories %}
+      <div class="column">
+         <div class="card">
+          <h3><center><strong>{{ story.source_name }}</strong></center></h3>
+          <div class="div1"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
+          <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
         </div>
-        {% endfor %}
+      </div>
+      {% endfor %}
     </div>
+    <div id = "notification" class ="cookie-banner-container">
+      <p>
+        This website uses cookies.
+      </p>
+      <p>
+        Please look at our cookie policies.
+      </p>
+      <button type="button" onclick="myFunction(); logEvent('click', 'cookie_button');">
+        I agree.
+      </button>
+    </div>
+    <script>
+      function myFunction() {
+      var x = document.getElementById("notification");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } 
+      else {
+        x.style.display = "none";
+      }
+      }
+    </script>
 </div>
 {% endblock %}

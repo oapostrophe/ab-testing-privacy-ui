@@ -1,3 +1,10 @@
+{% extends 'base.html'%}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<style>
 body{
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: medium;
@@ -79,41 +86,31 @@ li a:hover:not(.active) {
   background-color: transparent;
   text-decoration: none;
 }
-
-.cookie-banner-container {
-  background: skyblue;
-  padding: 8px 32px;
-  border-radius: 8px 8px 0 0;
-  position: fixed;
-  left: 24px;
-  right: 24px;
-  bottom: 300px;
-  max-width: 500px;
-  margin: 0 auto;
-  box-shadow: 2px -8px 18px black;
-
-  transition: 400ms;
-}
-.cookie-banner-container.active{
-  bottom: -100%;
-}
-.cookie-banner-container p {
-  font-size: 18px;
-}
-
-.cookie-banner-container p a{
-  color: black
-}
-
-.cookie-banner-container button {
-  border: 0;
-  padding: 16px 48px; 
-  background: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  margin: 16px 0;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 -8px 16px rgba(0,0,0,0.2);
-
-}
+</style>
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a class="active" href="/left/">Left-Wing</a></li>
+    <li><a href="/center/">Center</a></li>
+    <li><a href="/right/">Right-Wing</a></li>
+    <li><a href="/international/">International</a></li>
+  </ul>
+<div class = "content">
+    <h1 style="text-align: center">Left-Wing Stories</h1>
+    {% if stories|length < 1 %}
+    <a href="/">Refresh stories</a>
+    {% else %}
+    <div class="row">
+      {% for story in stories %}
+      <div class="column">
+         <div class="card">
+          <h3><center><strong>{{ story.source_name }}</strong></center></h3>
+          <div class="div1"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
+          <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="/">Refresh stories</a>
+    {% endif %}
+</div>
+{% endblock %}

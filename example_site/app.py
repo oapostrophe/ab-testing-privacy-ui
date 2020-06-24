@@ -6,13 +6,14 @@ from newsapi import NewsApiClient
 import time, hashlib, json, csv
 from userdata import Event
 
+
 # Initialize Flask, newsapi and database
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 newsapi = NewsApiClient(api_key = '85dd624eda284c998d1b3ba8ac0bb600')
 
-# Load time stories were last updated from file
+# Load last time stories were updated from file
 try:
     with open('last_updated.txt', "r") as file:
         time_string = file.read()
@@ -22,8 +23,9 @@ try:
 except:
     last_updated = 0
 
-# Initialize array for logging page visit data in memory
+# Initialize array for logging page data in memory
 events = []
+
 
 class Story(db.Model):
     """Database object to store retrieved stories."""
@@ -38,43 +40,6 @@ class Story(db.Model):
 
     def __repr__(self):
         return "<Story %r>" % self.id
-
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    """Display homepage, and log user events"""
-
-    # Log data from POST request upon user click
-    if request.method == "POST":
-        timestamp = time.time()
-        data = request.get_json()
-        print(data["event_type"])
-        log_event(events, request, timestamp, data["event_type"], 
-                    data["element_id"])
-        
-        # Code printing events for test
-        for event in events:
-            print(event)
-        response = make_response(jsonify({"message" : "event logged"}), 200)
-        return response
-    
-    # Display home page and log user opening page
-    else:
-        timestamp = time.time()
-        log_event(events, request, timestamp, "page_open")
-        print("page_open")
-        for event in events:
-            print(event)
-        stories = get_stories()
-        return render_template('index.html', stories=stories, 
-                                title="Trending Stories")
-
-@app.route('/international/')
-def international():
-    """Display international sources"""
-    stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
-    return render_template('index.html', stories=stories,
-                             title="International Coverage")
 
 def log_event(events, request, timestamp, event_type, element_id=None):
     """Log interaction during page visit received through POST request
@@ -92,6 +57,7 @@ def log_event(events, request, timestamp, event_type, element_id=None):
 
     # Add to events log
     events.append(Event(user_id, timestamp, event_type, element_id))
+
 
 def get_stories(sources=None):
     """Get stories from specified sources.
@@ -152,7 +118,6 @@ def add_stories(source, max_stories):
 
 def refresh_stories():
     """Put new stories in database"""
-    print("refreshing stories")
     # Delete any old stories in database
     if db.session.query(Story).count() > 0:
         db.session.query(Story).delete()
@@ -169,12 +134,52 @@ def refresh_stories():
     add_stories('bbc-news', 3)
     add_stories('reuters', 3)
 
-    # Record time updated
-    global last_updated
-    last_updated = int(time.time())
-    with open("last_updated.txt", "w") as file:
-        file.write(str(last_updated))
-        file.close()
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    """Display homepage, and log user events"""
+
+    # Log data from POST request upon user click
+    if request.method == "POST":
+        timestamp = time.time()
+        data = request.get_json()
+        log_event(events, request, timestamp, data["event_type"], 
+                    data["element_id"])
+        return make_response(jsonify({"message":"ok"}), 200)
+    
+    # Display home page and log user opening page
+    else:
+        timestamp = time.time()
+        log_event(events, request, timestamp, "page_open")
+        stories = get_stories()
+        return render_template('index.html', stories=stories)
+
+
+@app.route('/left/')
+def left():
+    """Display left sources"""
+    stories = get_stories(sources = ["Vice News", "The Washington Post"])
+    return render_template('left.html', stories=stories)
+
+@app.route('/center/')
+def center():
+    """Display center sources"""
+    stories = get_stories(sources = ["USA Today", "CNN"])
+    return render_template('center.html', stories=stories)
+
+@app.route('/right/')
+def right():
+    """Display right sources"""
+    stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
+    return render_template('right.html', stories=stories)
+
+
+@app.route('/international/')
+def international():
+    """Display international sources"""
+    stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
+    return render_template('international.html', stories=stories)
+
 
 if __name__ == "__main__":
     """Run dev server"""
@@ -185,7 +190,7 @@ if __name__ == "__main__":
         file = open("data_log.csv", "r")
         file.close()
 
-    # Create file and headers if not present
+    # Create log file and headers if not present
     except:
         file = open("data_log.csv", "w", newline = '')
         heading_writer = csv.writer(file, delimiter=',', quotechar='"',
@@ -194,7 +199,7 @@ if __name__ == "__main__":
                                  'element_id'])
         file.close()
 
-    # 
+    # Write data from events to csv file
     with open("data_log.csv", "a", newline='') as file:
         writer = csv.writer(file, delimiter = ',', quotechar = '"',
                     quoting = csv.QUOTE_ALL)
@@ -202,3 +207,4 @@ if __name__ == "__main__":
             row = [event.user_id, event.timestamp, event.event_type,
                     event.element_id]
             writer.writerow(row)
+        file.close()
