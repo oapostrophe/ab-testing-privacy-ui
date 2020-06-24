@@ -41,6 +41,7 @@ class Story(db.Model):
     def __repr__(self):
         return "<Story %r>" % self.id
 
+
 def log_event(events, request, timestamp, event_type, element_id=None):
     """Log interaction during page visit received through POST request
     
@@ -56,7 +57,8 @@ def log_event(events, request, timestamp, event_type, element_id=None):
     user_id = hashlib.sha256(ip).hexdigest()
 
     # Add to events log
-    events.append(Event(user_id, timestamp, event_type, element_id))
+    events.append(Event(user_id, timestamp, request.url, event_type,
+                     element_id))
 
 
 def get_stories(sources=None):
@@ -155,30 +157,83 @@ def index():
         return render_template('index.html', stories=stories)
 
 
-@app.route('/left/')
+@app.route('/left/', methods = ['GET', 'POST'])
 def left():
     """Display left sources"""
-    stories = get_stories(sources = ["Vice News", "The Washington Post"])
-    return render_template('left.html', stories=stories)
 
-@app.route('/center/')
+    # Log data from POST request upon user click
+    if request.method == "POST":
+        timestamp = time.time()
+        data = request.get_json()
+        log_event(events, request, timestamp, data["event_type"], 
+                    data["element_id"])
+        return make_response(jsonify({"message":"ok"}), 200)
+    
+    # Display page and log user opening page
+    else:
+        timestamp = time.time()
+        log_event(events, request, timestamp, "page_open")
+        stories = get_stories(sources = ["Vice News", "The Washington Post"])
+        return render_template('left.html', stories=stories)
+
+
+@app.route('/center/', methods = ['GET', 'POST'])
 def center():
     """Display center sources"""
-    stories = get_stories(sources = ["USA Today", "CNN"])
-    return render_template('center.html', stories=stories)
 
-@app.route('/right/')
+     # Log data from POST request upon user click
+    if request.method == "POST":
+        timestamp = time.time()
+        data = request.get_json()
+        log_event(events, request, timestamp, data["event_type"], 
+                    data["element_id"])
+        return make_response(jsonify({"message":"ok"}), 200)
+    
+    # Display page and log user opening page
+    else:
+        timestamp = time.time()
+        log_event(events, request, timestamp, "page_open")
+        stories = get_stories(sources = ["USA Today", "CNN"])
+        return render_template('center.html', stories=stories)
+
+@app.route('/right/', methods = ['GET', 'POST'])
 def right():
     """Display right sources"""
-    stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
-    return render_template('right.html', stories=stories)
+
+     # Log data from POST request upon user click
+    if request.method == "POST":
+        timestamp = time.time()
+        data = request.get_json()
+        log_event(events, request, timestamp, data["event_type"], 
+                    data["element_id"])
+        return make_response(jsonify({"message":"ok"}), 200)
+    
+    # Display page and log user opening page
+    else:
+        timestamp = time.time()
+        log_event(events, request, timestamp, "page_open")
+        stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
+        return render_template('right.html', stories=stories)
 
 
-@app.route('/international/')
+@app.route('/international/', methods = ['GET', 'POST'])
 def international():
     """Display international sources"""
-    stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
-    return render_template('international.html', stories=stories)
+
+     # Log data from POST request upon user click
+    if request.method == "POST":
+        timestamp = time.time()
+        data = request.get_json()
+        log_event(events, request, timestamp, data["event_type"], 
+                    data["element_id"])
+        return make_response(jsonify({"message":"ok"}), 200)
+    
+    # Display page and log user opening page
+    else:
+        timestamp = time.time()
+        log_event(events, request, timestamp, "page_open")
+        stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
+        return render_template('international.html', stories=stories)
 
 
 if __name__ == "__main__":
@@ -190,12 +245,12 @@ if __name__ == "__main__":
         file = open("data_log.csv", "r")
         file.close()
 
-    # Create log file and headers if not present
+    # Create csv file if not present
     except:
         file = open("data_log.csv", "w", newline = '')
         heading_writer = csv.writer(file, delimiter=',', quotechar='"',
                                     quoting = csv.QUOTE_ALL)
-        heading_writer.writerow(['user_id', 'timestamp', 'event_type',
+        heading_writer.writerow(['user_id', 'timestamp', 'url', 'event_type',
                                  'element_id'])
         file.close()
 
@@ -204,7 +259,7 @@ if __name__ == "__main__":
         writer = csv.writer(file, delimiter = ',', quotechar = '"',
                     quoting = csv.QUOTE_ALL)
         for event in events:
-            row = [event.user_id, event.timestamp, event.event_type,
+            row = [event.user_id, event.timestamp, event.url, event.event_type,
                     event.element_id]
             writer.writerow(row)
         file.close()
