@@ -9,40 +9,39 @@
 </head>
 <body>
     {% block body %}{% endblock %}
-    <script src = {{ url_for('static', filename = 'js/jquery-3.5.1.min.js') }}>
     </script>
     <script>
-
-        $(window).on( "beforeunload", function(){
-          logEvent("page_close")
+        window.addEventListener("beforeunload", function(){
+           navigator.sendBeacon(`${window.location}`, makeData("page_unload"))
         });
 
-        $(window).on( "load", function(){
-          logEvent("page_open")
+        window.addEventListener("load", function(){
+           logEvent("page_open")
         });
-      
-        /* Send a POST request to server logging a click or page close.
-          Takes string parameters event_type - "click" or "page_close", and 
-          optional element_id - what was clicked on  */
-        function logEvent(event_type, element_id="none") {
-          
+        
+        // Return string to send with POST request
+        function makeData(event_type, element_id="none") {
+
           // Get time in ms, round to 1/10th second due to browser imprecision
           timestamp = Math.floor(Date.now() / 100 );
           timestamp = timestamp / 10; // Convert from ms to seconds
           timestamp = String(timestamp); // Cast to string
 
           // Compile parameters into JSON object
-          var data = {
-            timestamp: timestamp,
-            event_type : event_type,
-            element_id : element_id
-          };
+          var data = timestamp + ";" + event_type + ";" + element_id
+          return data;
+        }
+
+        /* Send a POST request to server logging a click or page close.
+          Takes string parameters event_type - "click" or "page_close", and 
+          optional element_id - what was clicked on  */
+        function logEvent(event_type, element_id="none") {
       
           // Send POST request to backend
           fetch(`${window.location}`, {
             method: "POST",
             credentials: "include",
-            body: JSON.stringify(data),
+            body: makeData(event_type, element_id),
             cache: 'no-cache',
             headers: new Headers({
               'content-type': 'application/json'

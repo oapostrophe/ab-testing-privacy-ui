@@ -42,26 +42,25 @@ class Story(db.Model):
         return "<Story %r>" % self.id
 
 
-def log_event(events, request, timestamp, event_type, element_id=None):
+def log_event(events, request):
     """Log page events such as opening, closing, and clicks
     
     :param events: (list) Current events list in memory, to be appended
     :param request: Flask request object
-    :param timestamp: (int) Request timestamp as Unix int
-    :param event_type: (str) "page_open", "click", or "page_close"
-    :param element_id: (str) optional identifier for clicks of which page
-    element was clicked on.
     """
     # Get IP and convert to string
-    ip = str(request.remote_addr)[2:-1]
-    ip = ip.encode()
+    user_id = str(request.remote_addr)[2:-1]
+    user_id = user_id.encode()
 
     # Hash IP into user ID
-    user_id = hashlib.sha256(ip).hexdigest()
+    user_id = hashlib.sha256(user_id).hexdigest()
+
+    # Cast data to string into separate elements
+    datalist = str(request.data)[2:-1].split(';')
 
     # Add to events log
-    events.append(Event(user_id, timestamp, request.url, event_type,
-                     element_id))
+    events.append(Event(user_id, datalist[0], request.url, datalist[1],
+                     datalist[2]))
 
 
 def get_stories(sources=None):
@@ -160,11 +159,9 @@ def index():
 
     # Log data from POST request upon user click
     if request.method == "POST":
-        data = request.get_json()
-        log_event(events, request, data["timestamp"], data["event_type"], 
-                    data["element_id"])
+        log_event(events, request)
         return make_response(jsonify({"message":"ok"}), 200)
-    
+        
     # Display home page and log user opening page
     else:
         stories = get_stories()
@@ -178,9 +175,7 @@ def left():
 
     # Log data from POST request upon user click
     if request.method == "POST":
-        data = request.get_json()
-        log_event(events, request, data["timestamp"], data["event_type"], 
-                    data["element_id"])
+        log_event(events, request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
@@ -196,9 +191,7 @@ def center():
 
      # Log data from POST request upon user click
     if request.method == "POST":
-        data = request.get_json()
-        log_event(events, request, data["timestamp"], data["event_type"], 
-                    data["element_id"])
+        log_event(events, request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
@@ -214,9 +207,7 @@ def right():
 
      # Log data from POST request upon user click
     if request.method == "POST":
-        data = request.get_json()
-        log_event(events, request, data["timestamp"], data["event_type"], 
-                    data["element_id"])
+        log_event(events, request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
@@ -232,9 +223,7 @@ def international():
 
      # Log data from POST request upon user click
     if request.method == "POST":
-        data = request.get_json()
-        log_event(events, request, data["timestamp"], data["event_type"], 
-                    data["element_id"])
+        log_event(events, request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
@@ -247,7 +236,7 @@ if __name__ == "__main__":
     """Run dev server and log data to csv after server closes."""
 
     # Run Flask server
-    app.run(debug=True)
+    app.run(debug=True, host="10.0.0.241")
     
     # Check if csv file already exists
     try:
