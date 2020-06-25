@@ -12,16 +12,28 @@
     <script src = {{ url_for('static', filename = 'js/jquery-3.5.1.min.js') }}>
     </script>
     <script>
-        // Log page close
-        $(window).on( "unload", logEvent("page_close") );
+
+        $(window).on( "beforeunload", function(){
+          logEvent("page_close")
+        });
+
+        $(window).on( "load", function(){
+          logEvent("page_open")
+        });
       
         /* Send a POST request to server logging a click or page close.
           Takes string parameters event_type - "click" or "page_close", and 
           optional element_id - what was clicked on  */
         function logEvent(event_type, element_id="none") {
-      
+          
+          // Get time in ms, round to 1/10th second due to browser imprecision
+          timestamp = Math.floor(Date.now() / 100 );
+          timestamp = timestamp / 10; // Convert from ms to seconds
+          timestamp = String(timestamp); // Cast to string
+
           // Compile parameters into JSON object
           var data = {
+            timestamp: timestamp,
             event_type : event_type,
             element_id : element_id
           };

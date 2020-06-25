@@ -43,11 +43,14 @@ class Story(db.Model):
 
 
 def log_event(events, request, timestamp, event_type, element_id=None):
-    """Log interaction during page visit received through POST request
+    """Log page events such as opening, closing, and clicks
     
     :param events: (list) Current events list in memory, to be appended
-    :param timestamp: (int) Request timestamp as Unix int
     :param request: Flask request object
+    :param timestamp: (int) Request timestamp as Unix int
+    :param event_type: (str) "page_open", "click", or "page_close"
+    :param element_id: (str) optional identifier for clicks of which page
+    element was clicked on.
     """
     # Get IP and convert to string
     ip = str(request.remote_addr)[2:-1]
@@ -64,16 +67,16 @@ def log_event(events, request, timestamp, event_type, element_id=None):
 def get_stories(sources=None):
     """Get stories from specified sources.
 
-    :param stories: (array) Array of strings containing Story.source_name 
+    :param sources: (list) List of strings containing Story.source_name 
     values by which to filter database. Default value None will display all
     stories.
     """
 
     # Automatically update database if needed
     if db.session.query(Story).count() == 0 \
-        or int(time.time()) - last_updated > 3600:
+        or (time.time() - last_updated) > 3600:
         refresh_stories()
-    
+
     # Display all stories if given default sources value
     if sources == None:
          return Story.query.all()
@@ -120,6 +123,7 @@ def add_stories(source, max_stories):
 
 def refresh_stories():
     """Put new stories in database"""
+
     # Delete any old stories in database
     if db.session.query(Story).count() > 0:
         db.session.query(Story).delete()
@@ -135,109 +139,114 @@ def refresh_stories():
     add_stories('al-jazeera-english', 3)
     add_stories('bbc-news', 3)
     add_stories('reuters', 3)
+    
+    # Refresh time last updated
+    global last_updated
+    last_updated = time.time()
+    print("last updated now updated to:")
+    print(last_updated)
+    with open("last_updated.txt", "w") as file:
+        file.write(str(last_updated))
+        file.close()
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    """Display homepage, and log user events"""
+    """Display homepage.  GET request will be sent upon opening page and will
+        always log a page_open event.  POST request will be sent when the page
+        closes, or when the user clicks on certain page elements, and will
+        contain the event type and, if a click, the id of the element 
+        clicked on."""
 
     # Log data from POST request upon user click
     if request.method == "POST":
-        timestamp = time.time()
         data = request.get_json()
-        log_event(events, request, timestamp, data["event_type"], 
+        log_event(events, request, data["timestamp"], data["event_type"], 
                     data["element_id"])
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display home page and log user opening page
     else:
-        timestamp = time.time()
-        log_event(events, request, timestamp, "page_open")
         stories = get_stories()
         return render_template('index.html', stories=stories)
 
 
 @app.route('/left/', methods = ['GET', 'POST'])
 def left():
-    """Display left sources"""
+    """Display left-leaning sources and log page events, following protocol
+        documented in homepage "/" route."""
 
     # Log data from POST request upon user click
     if request.method == "POST":
-        timestamp = time.time()
         data = request.get_json()
-        log_event(events, request, timestamp, data["event_type"], 
+        log_event(events, request, data["timestamp"], data["event_type"], 
                     data["element_id"])
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
     else:
-        timestamp = time.time()
-        log_event(events, request, timestamp, "page_open")
         stories = get_stories(sources = ["Vice News", "The Washington Post"])
         return render_template('left.html', stories=stories)
 
 
 @app.route('/center/', methods = ['GET', 'POST'])
 def center():
-    """Display center sources"""
+    """Display cener-leaning sources and log page events, following protocol
+        documented in homepage "/" route."""
 
      # Log data from POST request upon user click
     if request.method == "POST":
-        timestamp = time.time()
         data = request.get_json()
-        log_event(events, request, timestamp, data["event_type"], 
+        log_event(events, request, data["timestamp"], data["event_type"], 
                     data["element_id"])
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
     else:
-        timestamp = time.time()
-        log_event(events, request, timestamp, "page_open")
         stories = get_stories(sources = ["USA Today", "CNN"])
         return render_template('center.html', stories=stories)
 
+
 @app.route('/right/', methods = ['GET', 'POST'])
 def right():
-    """Display right sources"""
+    """Display right-leaning sources and log page events, following protocol
+        documented in homepage "/" route."""
 
      # Log data from POST request upon user click
     if request.method == "POST":
-        timestamp = time.time()
         data = request.get_json()
-        log_event(events, request, timestamp, data["event_type"], 
+        log_event(events, request, data["timestamp"], data["event_type"], 
                     data["element_id"])
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
     else:
-        timestamp = time.time()
-        log_event(events, request, timestamp, "page_open")
         stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
         return render_template('right.html', stories=stories)
 
 
 @app.route('/international/', methods = ['GET', 'POST'])
 def international():
-    """Display international sources"""
+    """Display right-leaning sources and log page events, following protocol
+        documented in homepage "/" route."""
 
      # Log data from POST request upon user click
     if request.method == "POST":
-        timestamp = time.time()
         data = request.get_json()
-        log_event(events, request, timestamp, data["event_type"], 
+        log_event(events, request, data["timestamp"], data["event_type"], 
                     data["element_id"])
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page and log user opening page
     else:
-        timestamp = time.time()
-        log_event(events, request, timestamp, "page_open")
         stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
         return render_template('international.html', stories=stories)
 
 
 if __name__ == "__main__":
-    """Run dev server"""
+    """Run dev server and log data to csv after server closes."""
+
+    # Run Flask server
     app.run(debug=True)
     
     # Check if csv file already exists
@@ -254,7 +263,7 @@ if __name__ == "__main__":
                                  'element_id'])
         file.close()
 
-    # Write data from events to csv file
+    # Write data from events list to csv file
     with open("data_log.csv", "a", newline='') as file:
         writer = csv.writer(file, delimiter = ',', quotechar = '"',
                     quoting = csv.QUOTE_ALL)
