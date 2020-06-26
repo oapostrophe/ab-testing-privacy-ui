@@ -11,24 +11,50 @@
     {% block body %}{% endblock %}
     </script>
     <script>
+      
+      // Log page changes between "visible" or "hidden"
+      document.addEventListener("visibilitychange", function(){
+        navigator.sendBeacon(`${window.location}`, 
+        makeData(("page_" + document.visibilityState)))
+        }) 
 
-        document.addEventListener("visibilitychange", function(){
-            navigator.sendBeacon(`${window.location}`, 
-            makeData(("page_" + document.visibilityState)))
-            }) 
-
-
-        // Log unload event - always logged on desktop, usually not on mobile
-        window.addEventListener("beforeunload", function(){
-           navigator.sendBeacon(`${window.location}`, makeData("page_unload"))
+      // Log page unload events - usually not triggered on mobile
+      window.addEventListener("beforeunload", function(){
+        navigator.sendBeacon(`${window.location}`, makeData("page_unload"))
         });
 
-        // Log load event for page
+        // Log load event when page opens.
         window.addEventListener("load", function(){
-           logEvent("page_open")
+          logEvent("page_load")
         });
         
-        // Return string to send with POST request
+      /* Use to log page events by sending a POST request to server. Can't
+        log page unload due to asynchronous running - page finishes closing
+        before the request can receive a response. Use "navigator.sendbeacon"
+        for unload events instead.
+        
+        :param event_type: (str) - Type of event to log, currently used
+        values are "page_load", "page_unload", "page_show", "page_hide",
+        and "click."
+        :param element_id: (str) Optional element_id, currently used for
+        "click" events to identify what was clicked on.  Defaults to "none."
+        what was clicked on  */
+      function logEvent(event_type, element_id="none") {
+      
+        // Send POST request to backend
+        fetch(`${window.location}`, {
+          method: "POST",
+          credentials: "include",
+          body: makeData(event_type, element_id),
+          cache: 'no-cache',
+          headers: new Headers({
+          'content-type': 'application/json'})
+          });
+        }
+
+        /* Use if calling "navigator.sendbeacon" to log an event.  Makes a 
+          string with the timestamp, event type, and element id which the
+          server can receive through a POST request and process. */
         function makeData(event_type, element_id="none") {
 
           // Get time in ms, round to 1/10th second due to browser imprecision
@@ -41,24 +67,6 @@
           return data;
         }
 
-        /* Send a POST request to server, logging a page event.  Can't be used
-          for page unload due to asynchronous running - page finishes closing
-          before the request can receive a response. Use "navigator.sendbeacon"
-          instead.  Takes string parameters event_type - "page_load", or 
-          "click", and optional element_id - what was clicked on  */
-        function logEvent(event_type, element_id="none") {
-      
-          // Send POST request to backend
-          fetch(`${window.location}`, {
-            method: "POST",
-            credentials: "include",
-            body: makeData(event_type, element_id),
-            cache: 'no-cache',
-            headers: new Headers({
-              'content-type': 'application/json'
-            })
-          });
-        }
       </script>
 </body>
 </html
