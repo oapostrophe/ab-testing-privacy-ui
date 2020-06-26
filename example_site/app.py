@@ -48,6 +48,7 @@ def log_event(events, request):
     :param events: (list) Current events list in memory, to be appended
     :param request: Flask request object
     """
+    print("logging event!")
     # Get IP and convert to string
     user_id = str(request.remote_addr)[2:-1]
     user_id = user_id.encode()

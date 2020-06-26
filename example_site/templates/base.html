@@ -11,10 +11,19 @@
     {% block body %}{% endblock %}
     </script>
     <script>
+
+        document.addEventListener("visibilitychange", function(){
+            navigator.sendBeacon(`${window.location}`, 
+            makeData(("page_" + document.visibilityState)))
+            }) 
+
+
+        // Log unload event - always logged on desktop, usually not on mobile
         window.addEventListener("beforeunload", function(){
            navigator.sendBeacon(`${window.location}`, makeData("page_unload"))
         });
 
+        // Log load event for page
         window.addEventListener("load", function(){
            logEvent("page_open")
         });
@@ -32,9 +41,11 @@
           return data;
         }
 
-        /* Send a POST request to server logging a click or page close.
-          Takes string parameters event_type - "click" or "page_close", and 
-          optional element_id - what was clicked on  */
+        /* Send a POST request to server, logging a page event.  Can't be used
+          for page unload due to asynchronous running - page finishes closing
+          before the request can receive a response. Use "navigator.sendbeacon"
+          instead.  Takes string parameters event_type - "page_load", or 
+          "click", and optional element_id - what was clicked on  */
         function logEvent(event_type, element_id="none") {
       
           // Send POST request to backend
