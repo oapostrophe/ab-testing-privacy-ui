@@ -30,17 +30,82 @@
     </div>
     <a href="/">Refresh stories</a>
     <div id = "notification" class ="cookie-banner-container">
-      <p>
+      <p align="right">
+        <input type="button" value="X" onclick="enableScroll(), myFunction()"/>
+      </p>      
+      <center>
+      <p id="text">
         This website uses cookies.
       </p>
-      <p>
+      <p id="text">
         Please look at our cookie policies.
       </p>
-      <button type="button" onclick="myFunction()">
-        I agree.
+      <button type="button" onclick="enableScroll(), myFunction()">
+        Accept cookies
       </button>
+      <button type="button" id="button2">
+        Do not sell my information
+      </button>
+      </center>
     </div>
     <script>
+      function disableScroll() { 
+    // Get the current page scroll position 
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft, 
+  
+        // if any scroll is attempted, set this to the previous value 
+        window.onscroll = function() { 
+            window.scrollTo(scrollLeft, scrollTop); 
+        }; 
+} 
+  
+function enableScroll() { 
+    window.onscroll = function() {}; 
+} 
+    function determine_layout() {
+      var left_right = Math.floor(Math.random() * 3);
+      var up_down= Math.floor(Math.random() * 2);
+      var versions=Math.floor(Math.random()*2)
+      var x = document.getElementById("notification");
+      var button2 = document.getElementById("button2");
+      if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        left_right=1;
+      }
+      if (String(left_right) == "0"){
+        x.style.left = "10px";
+        x.style.right="";
+      }
+      else if (String(left_right) == "1"){
+        x.style.left = "24px";
+        x.style.right="24px"
+      }
+      else if (String(left_right) == "2"){
+        x.style.left = "";
+        x.style.right="10px"
+      }
+      if (String(up_down) == "0"){
+        x.style.bottom="450px";
+      }
+      else if (String(up_down) =="1"){
+        x.style.bottom="10px";
+      }
+      if (String(versions) == "0"){
+        button2.innerHTML="Read our cookie policy"
+        button2.setAttribute( "onClick", "javascript: readMore();" )
+      }
+      else{
+        button2.innerHTML="Do not sell my information"
+        button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll();" )
+      }
+    }
+    function readMore(){
+      var button2 = document.getElementById("button2");
+      var text = document.getElementById("text");
+      text.innerHTML="Cookie Policy!";
+      button2.innerHTML="Don't allow";
+      button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll();;" )
+    }
       function myFunction() {
       var x = document.getElementById("notification");
       if (x.style.display === "none") {

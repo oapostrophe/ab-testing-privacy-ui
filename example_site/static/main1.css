@@ -85,10 +85,8 @@ li a:hover:not(.active) {
   padding: 8px 32px;
   border-radius: 8px 8px 0 0;
   position: fixed;
-  left: 24px;
-  right: 24px;
-  bottom: 300px;
-  max-width: 500px;
+  bottom: -100%;
+  max-width: 400px;
   margin: 0 auto;
   box-shadow: 2px -8px 18px black;
 
@@ -115,5 +113,4 @@ li a:hover:not(.active) {
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 0 -8px 16px rgba(0,0,0,0.2);
-
 }
