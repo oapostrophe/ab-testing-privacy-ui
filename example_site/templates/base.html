@@ -9,5 +9,8 @@
 </head>
 <body onload = "determine_layout(), disableScroll()">
     {% block body %}{% endblock %}
+    {%block script %}
+    <script src = {{ url_for('static', filename='js/scripts.js') }}></script>
+    {% endblock %}
 </body>
 </html

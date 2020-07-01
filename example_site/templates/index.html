@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% block head %}
-<link href="static\main1.css" rel="stylesheet" type="text/css" media="all">
+<link href={{ url_for('static', filename = 'main1.css') }} rel="stylesheet" type="text/css" media="all">
 {% endblock %}
 
 {% block body %}
@@ -14,9 +14,6 @@
   </ul>
 <div class = "content">
     <h1 style="text-align: center">Trending Stories</h1>
-    {% if stories|length < 1 %}
-    <a href="/">Refresh stories</a>
-    {% else %}
     <div class="row">
       {% for story in stories %}
       <div class="column">
@@ -28,7 +25,6 @@
       </div>
       {% endfor %}
     </div>
-    <a href="/">Refresh stories</a>
     <div id = "notification" class ="cookie-banner-container">
       <p align="right">
         <input type="button" value="X" onclick="enableScroll(), myFunction()"/>
@@ -40,8 +36,13 @@
       <p id="text">
         Please look at our cookie policies.
       </p>
+<<<<<<< HEAD
       <button type="button" onclick="enableScroll(), myFunction()">
         Accept cookies
+=======
+      <button type="button" onclick="myFunction(); logEvent('click', 'cookie_button');">
+        I agree.
+>>>>>>> master
       </button>
       <button type="button" id="button2">
         Do not sell my information
@@ -116,6 +117,5 @@ function enableScroll() {
       }
       }
     </script>
-    {% endif %}
 </div>
 {% endblock %}
