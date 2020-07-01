@@ -1,3 +1,63 @@
+/* Use to log page events by sending a POST request to server. Can't
+log page unload due to asynchronous running - page finishes closing
+before the request can receive a response. Use "navigator.sendbeacon"
+for unload events instead.
+        
+:param event_type: (str) - Type of event to log, currently used values are 
+"page_load", "page_unload", "page_show", "page_hide", and "click."
+:param element_id: (str) Optional element_id, currently used for "click" 
+events to identify what was clicked on.  Defaults to "none."  */
+function logEvent(event_type, element_id="n") {
+  
+  if(typeof banner_style == 'undefined')
+  {
+    banner_style = 'nnn';
+  }
+  // Send POST request to backend
+  fetch(`${window.location}`, {
+    method: "POST",
+    credentials: "include",
+    body: makeData(event_type, element_id, banner_style),
+    cache: 'no-cache',
+    headers: new Headers({
+      'content-type': 'application/json'})
+    });
+}
+    
+/* Use if calling "navigator.sendbeacon" to log an event.  Makes a 
+string with the timestamp, event type, and element id which the
+server can receive through a POST request and process.
+
+:param event_type: (str) - Type of event to log, currently used values are 
+"page_load", "page_unload", "page_show", "page_hide", and "click."
+:param element_id: (str) Optional element_id, currently used for "click" 
+events to identify what was clicked on.  Defaults to "none." */
+function makeData(event_type, element_id="n") 
+{
+  // Set banner style to "none" value if undefined
+  if(typeof banner_style == 'undefined')
+  {
+    banner_style = 'nnn';
+  }
+
+  // Get time in ms, round to 1/10th second due to browser imprecision
+  timestamp = Math.floor(Date.now() / 100 );
+  timestamp = timestamp / 10;
+  timestamp = String(timestamp);
+    
+  // Compile parameters into JSON object
+  var data = timestamp + ";;;" + event_type + ";;;" + element_id + ";;;" + banner_style + ";;;" + navigator.userAgent ;
+  return data;
+}
+
+// listener for page load
+window.addEventListener("load", function(){
+  logEvent("page_load")});
+
+
+
+// Script to log focus changes
+
 var browserPrefixes = ['moz', 'ms', 'o', 'webkit'],
 isVisible = true; // internal flag, defaults to true
 
@@ -37,10 +97,10 @@ function onVisible() {
 
   // send page focus event to server
     navigator.sendBeacon(`${window.location}`, 
-    makeData(("page_focus")));
+    makeData("page_focus"));
+
   // change flag value
   isVisible = true;
-  console.log('visible');
 }
 
 function onHidden() {
@@ -48,11 +108,11 @@ function onHidden() {
   if(!isVisible) {
     return;
   }
-  navigator.sendBeacon(`${window.location}`, 
-    makeData(("page_blur")));
+    navigator.sendBeacon(`${window.location}`, 
+    makeData("page_blur"));
+
   // change flag value
   isVisible = false;
-  console.log('hidden');
 }
 
 function handleVisibilityChange(forcedFlag) {
@@ -91,52 +151,3 @@ window.addEventListener('focus', function() {
 window.addEventListener('blur', function() {
   handleVisibilityChange(false);
 }, false);
-
-
-// listener for page load
-window.addEventListener("load", function(){
-    logEvent("page_load")
-  });
-
-/* Use to log page events by sending a POST request to server. Can't
-log page unload due to asynchronous running - page finishes closing
-before the request can receive a response. Use "navigator.sendbeacon"
-for unload events instead.
-        
-:param event_type: (str) - Type of event to log, currently used values are 
-"page_load", "page_unload", "page_show", "page_hide", and "click."
-:param element_id: (str) Optional element_id, currently used for "click" 
-events to identify what was clicked on.  Defaults to "none."  */
-function logEvent(event_type, element_id="none") {
-  
-  // Send POST request to backend
-  fetch(`${window.location}`, {
-    method: "POST",
-    credentials: "include",
-    body: makeData(event_type, element_id),
-    cache: 'no-cache',
-    headers: new Headers({
-      'content-type': 'application/json'})
-    });
-}
-    
-/* Use if calling "navigator.sendbeacon" to log an event.  Makes a 
-string with the timestamp, event type, and element id which the
-server can receive through a POST request and process.
-
-:param event_type: (str) - Type of event to log, currently used values are 
-"page_load", "page_unload", "page_show", "page_hide", and "click."
-:param element_id: (str) Optional element_id, currently used for "click" 
-events to identify what was clicked on.  Defaults to "none." */
-function makeData(event_type, element_id="none") {
-    
-  // Get time in ms, round to 1/10th second due to browser imprecision
-  timestamp = Math.floor(Date.now() / 100 );
-  timestamp = timestamp / 10; // Convert from ms to seconds
-  timestamp = String(timestamp); // Cast to string
-    
-  // Compile parameters into JSON object
-  var data = timestamp + ";" + event_type + ";" + element_id
-  return data;
-}
-    
