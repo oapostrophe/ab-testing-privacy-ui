@@ -65,11 +65,12 @@ def log_event(events, request):
     user_id = hashlib.sha256(user_id).hexdigest()
 
     # Cast data to string into separate elements
-    datalist = str(request.data)[2:-1].split(';')
+    data = str(request.data)[2:-1].split(';;;')
+    print(data)
 
     # Add to events log
-    events.append(Event(user_id, datalist[0], request.url, datalist[1],
-                     datalist[2]))
+    events.append(Event(user_id, request.url, data[0], data[1],
+                     data[2], data[3], data[4], data[5]))
 
 
 def get_stories(sources=None):
@@ -171,8 +172,20 @@ def index():
         
     # Display home page upon GET request
     else:
+
+        # Use hash of user IP to determine privacy notice style
+        user_id = str(request.remote_addr)[2:-1]
+        user_id = user_id.encode()
+        user_id = hashlib.sha256(user_id).hexdigest()
+        left_right = int(user_id[0:3], 16) % 3
+        up_down = int(user_id[3:6], 16) % 2
+        versions = int(user_id[6:8], 16) % 2
+
+
         stories = get_stories()
-        return render_template('index.html', stories=stories)
+        return render_template('index.html', stories=stories,
+                                left_right = left_right, up_down = up_down,
+                                versions = versions)
 
 
 @app.route('/left/', methods = ['GET', 'POST'])
@@ -239,7 +252,7 @@ if __name__ == "__main__":
     """Run dev server and log data to csv after server closes."""
 
     # Run Flask server
-    app.run(debug=True, host="192.168.1.239")
+    app.run(debug=True)
     
     # Check if csv file already exists
     try:
@@ -251,8 +264,8 @@ if __name__ == "__main__":
         file = open("data_log.csv", "w", newline = '')
         heading_writer = csv.writer(file, delimiter=',', quotechar='"',
                                     quoting = csv.QUOTE_ALL)
-        heading_writer.writerow(['user_id', 'timestamp', 'url', 'event_type',
-                                 'element_id'])
+        heading_writer.writerow(['user_id', 'url', 'timestamp', 'event_type',
+                                 'element_id', 'banner_style', 'user_agent', 'mobile'])
         file.close()
 
     # Write data from events list to csv file
@@ -260,7 +273,7 @@ if __name__ == "__main__":
         writer = csv.writer(file, delimiter = ',', quotechar = '"',
                     quoting = csv.QUOTE_ALL)
         for event in events:
-            row = [event.user_id, event.timestamp, event.url, event.event_type,
-                    event.element_id]
+            row = [event.user_id, event.url, event.timestamp, event.event_type,
+                    event.element_id, event.banner_style, event.user_agent, event.mobile]
             writer.writerow(row)
         file.close()

@@ -19,7 +19,7 @@
       <div class="column">
          <div class="card">
           <h3><center><strong>{{ story.source_name }}</strong></center></h3>
-          <div class="div1"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
+          <div class="div1" onclick="logEvent('click', '{{ story.url }}');"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
           <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
         </div>
       </div>
@@ -27,7 +27,7 @@
     </div>
     <div id = "notification" class ="cookie-banner-container">
       <p align="right">
-        <input type="button" value="X" onclick="enableScroll(), myFunction()"/>
+        <input type="button" value="X" onclick="enableScroll(), myFunction(), logEvent('click', 'button_x');"/>
       </p>      
       <center>
       <p id="text">
@@ -36,7 +36,7 @@
       <p id="text">
         Please look at our cookie policies.
       </p>
-      <button type="button" onclick="enableScroll(), myFunction(), logEvent('click', 'cookie_button')">
+      <button type="button" onclick="enableScroll(), myFunction(), logEvent('click', 'button1_accept_cookies');">
         Accept cookies
       </button>
       <button type="button" id="button2">
@@ -44,7 +44,30 @@
       </button>
       </center>
     </div>
+
     <script>
+
+    // Declare global variables for banner style
+    
+    //Code to determine based on hash of user IP address
+    var left_right = {{ left_right }} ;
+    var up_down = {{ up_down }} ;
+    var versions = {{ versions }} ;
+    if (window.innerwidth <500){
+        left_right=1;
+        var mobile=true;
+      }
+    else{
+      var mobile=false;
+    }
+    var banner_style = String(left_right) + String(up_down) + String(versions);
+
+    /* Code for random determination of privacy banner
+      var left_right = Math.floor(Math.random() * 3);
+      var up_down= Math.floor(Math.random() * 2);
+      var versions=Math.floor(Math.random()*2)
+    */
+
       function disableScroll() { 
     // Get the current page scroll position 
     scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
@@ -59,18 +82,14 @@
 function enableScroll() { 
     window.onscroll = function() {}; 
 } 
-    function determine_layout() {
-      var left_right = Math.floor(Math.random() * 3);
-      var up_down= Math.floor(Math.random() * 2);
-      var versions=Math.floor(Math.random()*2)
+
+function determine_layout() {
+
       var x = document.getElementById("notification");
       var body=document.getElementById("body");
       var button2 = document.getElementById("button2");
       var screenWidth=window.innerWidth;
       var screenHeight=String(window.innerHeight -340)+"px";
-      if (screenWidth<500){
-        left_right=1;
-      }
       if (String(left_right) == "0"){
         x.style.left = "10px";
         x.style.right="";
@@ -91,11 +110,11 @@ function enableScroll() {
       }
       if (String(versions) == "0"){
         button2.innerHTML="Read our cookie policy"
-        button2.setAttribute( "onClick", "javascript: readMore();" )
+        button2.setAttribute( "onClick", "javascript: readMore(), logEvent('click', 'button2_read_more');" )
       }
       else{
         button2.innerHTML="Do not sell my information"
-        button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll();" )
+        button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), logEvent('click', 'button2_do_not_sell');" )
       }
     }
     function readMore(){
@@ -104,7 +123,7 @@ function enableScroll() {
       var text = document.getElementById("text");
       text.innerHTML=String(test);
       button2.innerHTML="Don't allow";
-      button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll();;" )
+      button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), logEvent('click', 'button2_don't_allow');" )
     }
       function myFunction() {
       var x = document.getElementById("notification");
