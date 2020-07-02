@@ -239,7 +239,7 @@ if __name__ == "__main__":
     """Run dev server and log data to csv after server closes."""
 
     # Run Flask server
-    app.run(debug=True, host="10.0.0.241")
+    app.run(debug=True, host="192.168.1.239")
     
     # Check if csv file already exists
     try:
