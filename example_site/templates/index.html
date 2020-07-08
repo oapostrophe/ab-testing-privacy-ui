@@ -12,6 +12,10 @@
     <li><a href="/right/">Right-Wing</a></li>
     <li><a href="/international/">International</a></li>
   </ul>
+  <div id="myNav" class="overlay">
+    <div class="overlay-content">
+    </div>
+  </div>
 <div class = "content">
     <h1 style="text-align: center">Trending Stories</h1>
     <div class="row">
@@ -31,15 +35,12 @@
       </p>      
       <center>
       <p id="text">
-        This website uses cookies.
-      </p>
-      <p id="text">
-        Please look at our cookie policies.
+        California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing “Do not sell my personal information”  You can find out more in our privacy policy at the bottom of any page.
       </p>
       <button type="button" onclick="enableScroll(), myFunction(), logEvent('click', 'button1_accept_cookies');">
         Accept cookies
       </button>
-      <button type="button" id="button2">
+      <button type="button" id="button2" onclick="myFunction()">
         Do not sell my information
       </button>
       </center>
@@ -50,7 +51,7 @@
     // Declare global variables for banner style
     
     //Code to determine based on hash of user IP address
-    var left_right = {{ left_right }} ;
+    /*var left_right = {{ left_right }} ;
     var up_down = {{ up_down }} ;
     var versions = {{ versions }} ;
     if (window.innerwidth <500){
@@ -61,6 +62,7 @@
       var mobile=false;
     }
     var banner_style = String(left_right) + String(up_down) + String(versions);
+    */
 
     /* Code for random determination of privacy banner
       var left_right = Math.floor(Math.random() * 3);
@@ -85,7 +87,7 @@ function enableScroll() {
 
 function determine_layout() {
 
-      var x = document.getElementById("notification");
+      /*var x = document.getElementById("notification");
       var body=document.getElementById("body");
       var button2 = document.getElementById("button2");
       var screenWidth=window.innerWidth;
@@ -115,15 +117,86 @@ function determine_layout() {
       else{
         button2.innerHTML="Do not sell my information"
         button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), logEvent('click', 'button2_do_not_sell');" )
+      }*/
+      var desktop_layout=Math.floor(Math.random() * 8);
+      var mobile_layout=Math.floor(Math.random()*4);
+      var x = document.getElementById("notification");
+      var overlay=document.getElementById("myNav");
+      var button2 = document.getElementById("button2");
+      var screenWidthString=String(window.innerWidth+100)+"px";
+      var screenHeight=String(window.innerHeight -340)+"px";
+      var bannerScreenHeight=String(window.innerHeight-200)+"px";
+      var middleScreenHeight=String((window.innerHeight)/3)+"px";
+      x.style.display="block";
+      if (window.innerWidth>500){
+      if (String(desktop_layout) == "0"){
+        x.style.bottom="10px";
+        x.style.left = "10px";
+        x.style.right="";
+      }
+      if (String(desktop_layout) == "1"){
+        x.style.bottom="10px";
+        x.style.left = "24px";
+        x.style.right="24px";
+        x.style.maxWidth=screenWidthString;
+      }
+      if (String(desktop_layout) == "2"){
+        x.style.bottom="10px";
+        x.style.left = "";
+        x.style.right="10px"
+      }
+      if (String(desktop_layout) == "3"){
+        x.style.bottom=screenHeight;
+        x.style.left = "10px";
+        x.style.right="";
+      }
+      if (String(desktop_layout) == "4"){
+        x.style.bottom=bannerScreenHeight;
+        x.style.left = "24px";
+        x.style.right="24px";
+        x.style.maxWidth=screenWidthString;
+      }
+      if (String(desktop_layout) == "5"){
+        x.style.bottom=screenHeight;
+        x.style.left = "";
+        x.style.right="10px"
+      }
+      if (String(desktop_layout) == "6"){
+        x.style.bottom=middleScreenHeight;
+        x.style.left = "24px";
+        x.style.right="24px";
+      }
+      if (String(desktop_layout)=="7"){
+        x.style.display="none";
       }
     }
+    else{
+      x.style.left = "24px";
+      x.style.right="24px";
+      if (String(mobile_layout)=="0"){
+        x.style.bottom="10px"
+      }
+      if (String(mobile_layout)=="1"){
+        x.style.bottom=middleScreenHeight;
+      }
+      if (String(mobile_layout)=="2"){
+        x.style.bottom=screenHeight;
+      }
+      if (String(mobile_layout)=="3"){
+        x.style.display="none";
+      }
+    }}
+
+    function endOverlay(){
+      var overlay=document.getElementById("myNav");
+      overlay.style.display="none"
+    }
     function readMore(){
-      var test=window.innerHeight -300;
       var button2 = document.getElementById("button2");
       var text = document.getElementById("text");
-      text.innerHTML=String(test);
+      text.innerHTML="Under the California Consumer Privacy Act, you have the right to opt-out of the sale of your personal information to third parties. You may exercise your right to opt out of the sale of personal information by clicking the 'Deny Cookies' button.";
       button2.innerHTML="Don't allow";
-      button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), logEvent('click', 'button2_don't_allow');" )
+      button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), endOverlay();" )
     }
       function myFunction() {
       var x = document.getElementById("notification");
@@ -136,4 +209,6 @@ function determine_layout() {
       }
     </script>
 </div>
+<div class="footer">
+  <p><a href="https://www.freeprivacypolicy.com/blog/privacy-policy-url/" target="_blank">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="determine_layout()">Cookie Policy</a></p>
 {% endblock %}
