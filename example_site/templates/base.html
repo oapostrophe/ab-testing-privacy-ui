@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block head %}{% endblock %}
 </head>
-<body onload = "determine_layout(), disableScroll()" id="body">
+<body onload = "determine_layout()" id="body">
     {% block body %}{% endblock %}
     {%block script %}
     <script src = {{ url_for('static', filename='js/scripts.js') }}></script>

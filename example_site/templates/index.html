@@ -34,7 +34,7 @@
         <input type="button" value="X" onclick="enableScroll(), myFunction(), logEvent('click', 'button_x');"/>
       </p>      
       <center>
-      <p id="text">
+      <p id="text" style="font-size:12px;">
         California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing “Do not sell my personal information”  You can find out more in our privacy policy at the bottom of any page.
       </p>
       <button type="button" onclick="enableScroll(), myFunction(), logEvent('click', 'button1_accept_cookies');">
@@ -170,6 +170,7 @@ function determine_layout() {
         x.style.display="none";
       }
     }
+    ///check for mobile
     else{
       x.style.left = "24px";
       x.style.right="24px";
@@ -186,6 +187,14 @@ function determine_layout() {
         x.style.display="none";
       }
     }}
+    function linkClicked(){
+      var x = document.getElementById("notification");
+      var middleScreenHeight=String((window.innerHeight)/3)+"px"
+      x.style.display="block";
+      x.style.bottom=middleScreenHeight;
+      x.style.left = "24px";
+      x.style.right="24px";
+    }
 
     function endOverlay(){
       var overlay=document.getElementById("myNav");
@@ -210,5 +219,5 @@ function determine_layout() {
     </script>
 </div>
 <div class="footer">
-  <p><a href="https://www.freeprivacypolicy.com/blog/privacy-policy-url/" target="_blank">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="determine_layout()">Cookie Policy</a></p>
+  <p><a href="https://www.freeprivacypolicy.com/blog/privacy-policy-url/" target="_blank">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked()">Do Not Sell My Information</a></p>
 {% endblock %}
