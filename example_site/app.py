@@ -152,8 +152,6 @@ def refresh_stories():
     # Refresh time last updated
     global last_updated
     last_updated = time.time()
-    print("last updated now updated to:")
-    print(last_updated)
     with open("last_updated.txt", "w") as file:
         file.write(str(last_updated))
         file.close()
@@ -172,20 +170,18 @@ def index():
         
     # Display home page upon GET request
     else:
-
         # Use hash of user IP to determine privacy notice style
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
-        left_right = int(user_id[0:3], 16) % 3
-        up_down = int(user_id[3:6], 16) % 2
-        versions = int(user_id[6:8], 16) % 2
-
-
+        desktop_layout = int(user_id[0:10], 16) % 8
+        print(desktop_layout)
+        mobile_layout = int(user_id[10:20], 16) % 4
+        print(mobile_layout)
         stories = get_stories()
         return render_template('index.html', stories=stories,
-                                left_right = left_right, up_down = up_down,
-                                versions = versions)
+                                desktop_layout=desktop_layout,
+                                mobile_layout = mobile_layout)
 
 
 @app.route('/left/', methods = ['GET', 'POST'])
@@ -252,7 +248,7 @@ if __name__ == "__main__":
     """Run dev server and log data to csv after server closes."""
 
     # Run Flask server
-    app.run(debug=True)
+    app.run(debug=True, host="10.0.0.241")
     
     # Check if csv file already exists
     try:

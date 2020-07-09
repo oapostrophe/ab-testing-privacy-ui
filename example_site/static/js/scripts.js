@@ -1,3 +1,11 @@
+//Set global variable for mobile
+if (window.innerWidth < 500){
+  var mobile = true;
+}
+else{
+  var mobile = false;
+}
+
 /* Use to log page events by sending a POST request to server. Can't
 log page unload due to asynchronous running - page finishes closing
 before the request can receive a response. Use "navigator.sendbeacon"
@@ -7,8 +15,7 @@ for unload events instead.
 "page_load", "page_unload", "page_show", "page_hide", and "click."
 :param element_id: (str) Optional element_id, currently used for "click" 
 events to identify what was clicked on.  Defaults to "none."  */
-function logEvent(event_type, element_id="n") {
-
+function logEvent(event_type, element_id="na") {
   // Send POST request to backend
   fetch(`${window.location}`, {
     method: "POST",
@@ -28,12 +35,12 @@ server can receive through a POST request and process.
 "page_load", "page_unload", "page_show", "page_hide", and "click."
 :param element_id: (str) Optional element_id, currently used for "click" 
 events to identify what was clicked on.  Defaults to "none." */
-function makeData(event_type, element_id="n") 
+function makeData(event_type, element_id="na") 
 {
   // Set banner style to "none" value if undefined
   if(typeof banner_style == 'undefined')
   {
-    banner_style = 'nnn';
+    banner_style = 'nobanner';
   }
 
   // Get time in ms, round to 1/10th second due to browser imprecision
