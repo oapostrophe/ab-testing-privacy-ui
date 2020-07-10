@@ -64,13 +64,12 @@ def log_event(events, request):
     # Hash IP into user ID
     user_id = hashlib.sha256(user_id).hexdigest()
 
-    # Cast data to string into separate elements
+    # Log data to console
     data = str(request.data)[2:-1].split(';;;')
-    print(data)
-
-    # Add to events log
-    events.append(Event(user_id, request.url, data[0], data[1],
-                     data[2], data[3], data[4], data[5]))
+    log = [user_id, request.url, data[0], data[1], data[2], data[3], data[4],
+            data[5]]
+    print('"'+log[0]+'",'+'"'+log[1]+'",'+'"'+log[2]+'",'+'"'+log[3]+'",'+'"'+log[4]+'",'+
+    '"'+log[5]+'",'+'"'+log[6]+'",'+'"'+log[7]+'",')
 
 
 def get_stories(sources=None):
@@ -175,9 +174,7 @@ def index():
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
         desktop_layout = int(user_id[0:10], 16) % 8
-        print(desktop_layout)
         mobile_layout = int(user_id[10:20], 16) % 4
-        print(mobile_layout)
         stories = get_stories()
         return render_template('index.html', stories=stories,
                                 desktop_layout=desktop_layout,
@@ -245,31 +242,7 @@ def international():
 
 
 if __name__ == "__main__":
-    """Run dev server and log data to csv after server closes."""
+    """Run dev server."""
 
     # Run Flask server
-    app.run(debug=True, host="10.0.0.241")
-    
-    # Check if csv file already exists
-    try:
-        file = open("data_log.csv", "r")
-        file.close()
-
-    # Create csv file if not present
-    except:
-        file = open("data_log.csv", "w", newline = '')
-        heading_writer = csv.writer(file, delimiter=',', quotechar='"',
-                                    quoting = csv.QUOTE_ALL)
-        heading_writer.writerow(['user_id', 'url', 'timestamp', 'event_type',
-                                 'element_id', 'banner_style', 'user_agent', 'mobile'])
-        file.close()
-
-    # Write data from events list to csv file
-    with open("data_log.csv", "a", newline='') as file:
-        writer = csv.writer(file, delimiter = ',', quotechar = '"',
-                    quoting = csv.QUOTE_ALL)
-        for event in events:
-            row = [event.user_id, event.url, event.timestamp, event.event_type,
-                    event.element_id, event.banner_style, event.user_agent, event.mobile]
-            writer.writerow(row)
-        file.close()
+    app.run(debug=True)
