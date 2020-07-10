@@ -55,10 +55,17 @@ function makeData(event_type, element_id="na")
 
 // listener for page load
 window.addEventListener("load", function(){
-  logEvent("page_load")});
+  navigator.sendBeacon(`${window.location}`, 
+    makeData("window_load"))});
+
+/* Extra listeners to try catching iOS events */
+window.setInterval(function(){logEvent("page_active");}, 1000);
 
 
 
+
+
+          
 // Script to log focus changes
 
 var browserPrefixes = ['moz', 'ms', 'o', 'webkit'],
