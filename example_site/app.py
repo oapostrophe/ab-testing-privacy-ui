@@ -228,6 +228,9 @@ def right():
         stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
         return render_template('right.html', stories=stories)
 
+@app.route('/privacypolicy/')
+def privacypolicy():
+    return render_template('privacypolicy.html')
 
 @app.route('/international/', methods = ['GET', 'POST'])
 def international():
@@ -248,7 +251,7 @@ if __name__ == "__main__":
     """Run dev server and log data to csv after server closes."""
 
     # Run Flask server
-    app.run(debug=True, host="10.0.0.241")
+    app.run(debug=True)
     
     # Check if csv file already exists
     try:
