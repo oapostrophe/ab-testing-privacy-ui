@@ -3,9 +3,6 @@
 {% block head %}
 <link href={{ url_for('static', filename = 'main1.css') }} rel="stylesheet" type="text/css" media="all">
 <script type="text/javascript" src="static\js\main.js">
-        var desktopLayout = {{ desktop_layout }};
-        var mobileLayout = {{ mobile_layout }};
-        document.cookie="acceptCookies=; desktopLayout="+desktopLayout+"; mobilelayout="+mobileLayout
 </script>
 {% endblock %}
 

@@ -1,13 +1,3 @@
-// Declare global variables for banner style
-var desktopLayout=1;/*getCookie("desktopLayout");*/
-var mobileLayout=1;/*getCookie("mobileLayout")*/
-if (window.innerwidth <500){
-  var banner_style = String(mobileLayout);
-}
-else {
-  var banner_style = String(desktopLayout);
-}
-
 function disableScroll() { 
   // Get the current page scroll position 
   scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
@@ -117,7 +107,7 @@ function readMore(){
   button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), endOverlay();" )
 }
 function myFunction() {
-  document.cookie="acceptCookies=1; path=/;";
+  document.cookie="acceptCookies=1; path=/; ";
   var x = document.getElementById("notification");
   if (x.style.display === "none") {
     x.style.display = "block";

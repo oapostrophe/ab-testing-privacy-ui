@@ -3,16 +3,6 @@
 {% block head %}
 <link href={{ url_for('static', filename = 'main1.css') }} rel="stylesheet" type="text/css" media="all">
 <script>
-// Declare global variables for banner style
-var desktopLayout=1;/*getCookie("desktopLayout");*/
-var mobileLayout=1;/*getCookie("mobileLayout")*/
-if (window.innerwidth <500){
-  var banner_style = String(mobileLayout);
-}
-else {
-  var banner_style = String(desktopLayout);
-}
-
 function disableScroll() { 
   // Get the current page scroll position 
   scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
