@@ -10,7 +10,26 @@
 <body onload = "determine_layout()" id="body">
     {% block body %}{% endblock %}
     {%block script %}
-    <script src = {{ url_for('static', filename='js/scripts.js') }}></script>
+    <script>
+        // Declare global variables determining layout
+        var desktopLayout = {{ desktop_layout }};
+        console.log(desktopLayout);
+        var mobileLayout = {{ mobile_layout }};
+        console.log(mobileLayout);
+        if (window.innerWidth < 500){
+        var mobile = true;
+        var bannerStyle = desktopLayout;
+        }
+        else{
+        var mobile = false;
+        var bannerStyle = mobileLayout;
+        }
+        console.log(mobile);
+    </script>
+    <script src = {{ url_for('static', filename='js/scripts.js') }}>
+</script>
+<script type="text/javascript" src= {{ url_for('static', filename='js/main.js') }}>
+</script>
     {% endblock %}
 </body>
-</html
+</html>

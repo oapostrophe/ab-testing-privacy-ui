@@ -1,10 +1,5 @@
 //Set global variable for mobile
-if (window.innerWidth < 500){
-  var mobile = true;
-}
-else{
-  var mobile = false;
-}
+
 
 /* Use to log page events by sending a POST request to server. Can't
 log page unload due to asynchronous running - page finishes closing

@@ -1,9 +1,3 @@
-{% extends 'base.html'%}
-
-{% block head %}
-<link href={{ url_for('static', filename = 'main1.css') }} rel="stylesheet" type="text/css" media="all">
-<script>
-
 function disableScroll() { 
   // Get the current page scroll position 
   scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
@@ -113,7 +107,7 @@ function readMore(){
   button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), endOverlay();" )
 }
 function myFunction() {
-  document.cookie="acceptCookies=1; path=/;";
+  document.cookie="acceptCookies=1; path=/; ";
   var x = document.getElementById("notification");
   if (x.style.display === "none") {
     x.style.display = "block";
@@ -138,53 +132,3 @@ function getCookie(cname) {
   }
   return "";
 }
-</script>
-{% endblock %}
-{% block body %}
-
-<ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/left/">Left-Wing</a></li>
-    <li><a class="active" href="/center/">Center</a></li>
-    <li><a href="/right/">Right-Wing</a></li>
-    <li><a href="/international/">International</a></li>
-  </ul>
-<div class = "content">
-    <h1 style="text-align: center">Center View Stories</h1>
-    {% if stories|length < 1 %}
-    <a href="/">Refresh stories</a>
-    {% else %}
-    <div class="row">
-      {% for story in stories %}
-      <div class="column">
-         <div class="card">
-          <h3><center><strong>{{ story.source_name }}</strong></center></h3>
-          <div class="div1"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
-          <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-  </div>
-  <div id = "notification" class ="cookie-banner-container">
-    <p align="right">
-      <input type="button" value="X" onclick="enableScroll(), myFunction(), logEvent('click', 'button_x');"/>
-    </p>      
-    <center>
-    <p id="text" style="font-size:12px;">
-      California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing “Do not sell my personal information”  You can find out more in our privacy policy at the bottom of any page.
-    </p>
-    <button type="button" onclick="enableScroll(), myFunction(), logEvent('click', 'button1_accept_cookies');">
-      Accept cookies
-    </button>
-    <button type="button" id="button2" onclick="myFunction()">
-      Do not sell my information
-    </button>
-    </center>
-  </div>
-  </div>
-  <div class="footer">
-    <p><a href="/privacypolicy/">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked()">Do Not Sell My Personal Information</a></p>
-  </div>
-{% endblock %}

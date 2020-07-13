@@ -193,7 +193,14 @@ def left():
     # Display page
     else:
         stories = get_stories(sources = ["Vice News", "The Washington Post"])
-        return render_template('left.html', stories=stories)
+        user_id = str(request.remote_addr)[2:-1]
+        user_id = user_id.encode()
+        user_id = hashlib.sha256(user_id).hexdigest()
+        desktop_layout = int(user_id[0:10], 16) % 8
+        mobile_layout = int(user_id[10:20], 16) % 4
+        return render_template('left.html', stories=stories, 
+                                desktop_layout=desktop_layout,
+                                mobile_layout = mobile_layout)
 
 
 @app.route('/center/', methods = ['GET', 'POST'])
@@ -208,7 +215,15 @@ def center():
     # Display page
     else:
         stories = get_stories(sources = ["USA Today", "CNN"])
-        return render_template('center.html', stories=stories)
+        stories = get_stories(sources = ["Vice News", "The Washington Post"])
+        user_id = str(request.remote_addr)[2:-1]
+        user_id = user_id.encode()
+        user_id = hashlib.sha256(user_id).hexdigest()
+        desktop_layout = int(user_id[0:10], 16) % 8
+        mobile_layout = int(user_id[10:20], 16) % 4
+        return render_template('center.html', stories=stories,
+                                desktop_layout=desktop_layout,
+                                mobile_layout = mobile_layout)
 
 
 @app.route('/right/', methods = ['GET', 'POST'])
@@ -222,13 +237,25 @@ def right():
     
     # Display page
     else:
+        user_id = str(request.remote_addr)[2:-1]
+        user_id = user_id.encode()
+        user_id = hashlib.sha256(user_id).hexdigest()
+        desktop_layout = int(user_id[0:10], 16) % 8
+        mobile_layout = int(user_id[10:20], 16) % 4
         stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
-        return render_template('right.html', stories=stories)
+        return render_template('right.html', stories=stories,
+                                desktop_layout=desktop_layout,
+                                mobile_layout = mobile_layout)
+
+
+@app.route('/privacypolicy/')
+def privacypolicy():
+    return render_template('privacypolicy.html')
 
 
 @app.route('/international/', methods = ['GET', 'POST'])
 def international():
-    """Display right-leaning sources and log page events from POST requests."""
+    """Display international sources and log page events from POST requests."""
 
      # Log data from POST request
     if request.method == "POST":
@@ -237,8 +264,15 @@ def international():
     
     # Display page
     else:
+        user_id = str(request.remote_addr)[2:-1]
+        user_id = user_id.encode()
+        user_id = hashlib.sha256(user_id).hexdigest()
+        desktop_layout = int(user_id[0:10], 16) % 8
+        mobile_layout = int(user_id[10:20], 16) % 4
         stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
-        return render_template('international.html', stories=stories)
+        return render_template('international.html', stories=stories,
+                                desktop_layout=desktop_layout,
+                                mobile_layout = mobile_layout)
 
 
 if __name__ == "__main__":
