@@ -3,7 +3,7 @@
 from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from newsapi import NewsApiClient
-import time, hashlib, json, csv
+import time, hashlib, json, csv, random
 from userdata import Event
 
 
@@ -83,13 +83,16 @@ def get_stories(sources=None):
 
     # Display all stories if given default sources value
     if sources == None:
-         return Story.query.all()
+         stories = Story.query.all()
+         random.shuffle(stories)
+         return stories
     
     # Display stories from specified sources
     stories = []
     for source in sources:
         source_stories = Story.query.filter_by(source_name=source).all()
         stories.extend(source_stories)
+    random.shuffle(stories)
     return stories
 
 
