@@ -1,18 +1,18 @@
 /* Use to log page events by sending a POST request to server. Can't
 log page unload due to asynchronous running - page finishes closing
-before the request can receive a response. Use "navigator.sendbeacon"
-for unload events instead.
+before the request can receive a response. Use "logBeacon" for these events
+instead.
         
-:param event_type: (str) - Type of event to log, currently used values are 
-"page_load", "page_unload", "page_show", "page_hide", and "click."
-:param element_id: (str) Optional element_id, currently used for "click" 
-events to identify what was clicked on.  Defaults to "none."  */
-function logEvent(event_type, element_id="na") {
+:param eventType: (str) - Type of event to log, currently used values are 
+"page_load", "page_unload", "page_blur", "page_focus", and "click."
+:param elementId: (str) Optional element_id, currently used for "click" 
+events to identify what was clicked on. Default value "na"  */
+function logEvent(eventType, elementId="na") {
   // Send POST request to backend
   fetch(`${window.location}`, {
     method: "POST",
     credentials: "include",
-    body: makeData(event_type, element_id),
+    body: makeData(eventType, elementId),
     cache: 'no-cache',
     headers: new Headers({
       'content-type': 'application/json'})
@@ -25,39 +25,56 @@ which will send without waiting for a response and thus complete even if the
 page unloads.  Avoid using when not necessary due to possible unreliability
 of the beacon API.
 
-:param event_type: (str) - Type of event to log, currently used values are 
-"page_load", "page_unload", "page_show", "page_hide", and "click."
-:param element_id: (str) Optional element_id, currently used for "click" 
-events to identify what was clicked on.  Defaults to "none."  */
-function logBeacon(event_type, element_id="na") {
-  navigator.sendBeacon(`${window.location}`, makeData(event_type, element_id));
+:param eventType: (str) - See documentation for logEvent above
+:param elementId: (str) See documentation for logEvent above  */
+function logBeacon(eventType, elementId="na") {
+  navigator.sendBeacon(`${window.location}`, makeData(eventType, elementId));
 }
     
-/*   Makes a 
-string with the timestamp, event type, and element id which the
-server can receive through a POST request and process.
+/*   Makes a string with all logged data which server can receive through POST
+request.  Values are separated by triple semicolons (;;;).  The following is
+included:
+  **timestamp - Epoch time of event in seconds.  Rounded to 1/10th of a second.
+  **event type - Type of event.  Currently used values are "page_load", 
+  "page_unload", "page_blur", "page_focus", and "click."
+  **element id - description of what was clicked on for click events
+  **bannerStyle - Number describing style of CCPA banner displayed, if any.
+  **navigator.userAgent - User Agent string from browser
+  **mobile - true or false denoting whether user has a mobile device.
 
-:param event_type: (str) - Type of event to log, currently used values are 
-"page_load", "page_unload", "page_show", "page_hide", and "click."
-:param element_id: (str) Optional element_id, currently used for "click" 
-events to identify what was clicked on.  Defaults to "none." */
-function makeData(event_type, element_id="na") 
+:param eventType: (str) - See documentation for logEvent above
+:param elementId: (str) See documentation for logEvent above */
+function makeData(eventType, elementId="na") 
 {
-  // Set banner style to "none" value if undefined
+  // Set banner style to "nobanner" value if undefined
   if(typeof bannerStyle == 'undefined')
   {
     bannerStyle = 'nobanner';
   }
 
   // Get time in ms, round to 1/10th second due to browser imprecision
-  timestamp = Math.floor(Date.now() / 100 );
-  timestamp = timestamp / 10;
-  timestamp = String(timestamp);
+  timeStamp = Math.floor(Date.now() / 100 );
+  timeStamp = timeStamp / 10;
+  timeStamp = String(timeStamp);
     
-  // Compile parameters into JSON object
-  var data = timestamp + ";;;" + event_type + ";;;" + element_id + ";;;" + bannerStyle + ";;;" + navigator.userAgent + ";;;" + String(mobile);
+  // Compile parameters into string
+  var data = timeStamp + ";;;" + eventType + ";;;" + elementId + ";;;" + bannerStyle + ";;;" + navigator.userAgent + ";;;" + String(mobile);
   return data;
 }
+
+/* Script setting event listeners to log various page events.  The following
+ DOM events are recorded with the corresponding event types:
+
+ window.load - "window_load"
+ document.visibilitychange / document.focus / document.blur /
+ window.focus / window.blur - "page_blur" or "page_focus" (each time the page
+  comes into or out of visibility, the corresponding value is only logged once)
+
+ Additionally, a timer attempts to log a "page_active" event 
+ every 1 second.  This catches issues where page closing is not always recorded,
+ mostly on iOS.
+
+ */
 
 // Listener for page load
 window.addEventListener("load", function(){

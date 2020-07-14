@@ -7,7 +7,7 @@ import time, hashlib, json, csv, random
 from userdata import Event
 
 
-# Initialize Flask, newsapi and database
+# Initialize Flask, newsapi and SQLalchemy
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
@@ -53,6 +53,7 @@ def log_event(request):
     
     :param request: Flask request object
     """
+
     # Get IP and convert to string
     user_id = str(request.remote_addr)[2:-1]
     user_id = user_id.encode()
@@ -81,13 +82,13 @@ def get_stories(sources=None):
         or (time.time() - last_updated) > 43200:
         refresh_stories()
 
-    # Display all stories if given default sources value
+    # Return all stories in database if given default sources value
     if sources == None:
          stories = Story.query.all()
          random.shuffle(stories)
          return stories
     
-    # Display stories from specified sources
+    # Return stories from specified sources
     stories = []
     for source in sources:
         source_stories = Story.query.filter_by(source_name=source).all()
@@ -158,22 +159,25 @@ def refresh_stories():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """ Display homepage.  GET request displays page, POST requests are sent to
-    log a page event: page_load, page_focus, page_blur, or clicks.
+    log page events.
     """
 
-    # Log data from POST request
+    # Log data from POST requests
     if request.method == "POST":
         log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
         
-    # Display home page upon GET request
+    # Display page for GET requests
     else:
-        # Use hash of user IP to determine privacy notice style
+
+        # Determine CCPA banner configuration based on user IP
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
         desktop_layout = int(user_id[0:10], 16) % 8
         mobile_layout = int(user_id[10:20], 16) % 4
+
+        # Display stories
         stories = get_stories()
         return render_template('index.html', stories=stories,
                                 desktop_layout=desktop_layout,
@@ -184,19 +188,23 @@ def index():
 def left():
     """Display left-leaning sources and log page events from POST requests."""
 
-    # Log data from POST request
+    # Log data from POST requests
     if request.method == "POST":
         log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
-    # Display page
+    # Display page for GET requests
     else:
-        stories = get_stories(sources = ["The Huffington Post", "Politico"])
+        
+        # Determine CCPA banner configuration based on user IP
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
         desktop_layout = int(user_id[0:10], 16) % 8
         mobile_layout = int(user_id[10:20], 16) % 4
+
+        # Get stories from selected sources and display
+        stories = get_stories(sources = ["The Huffington Post", "Politico"])
         return render_template('left.html', stories=stories, 
                                 desktop_layout=desktop_layout,
                                 mobile_layout = mobile_layout)
@@ -206,19 +214,23 @@ def left():
 def center():
     """Display cener-leaning sources and log page events from POST requests."""
 
-     # Log data from POST request
+     # Log data from POST requests
     if request.method == "POST":
         log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
-    # Display page
+    # Display page for GET requests
     else:
-        stories = get_stories(sources = ["USA Today", "CNN"])
+        
+        # Determine CCPA banner configuration based on user IP
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
         desktop_layout = int(user_id[0:10], 16) % 8
         mobile_layout = int(user_id[10:20], 16) % 4
+
+        # Get stories from selected sources and display
+        stories = get_stories(sources = ["USA Today", "CNN"])
         return render_template('center.html', stories=stories,
                                 desktop_layout=desktop_layout,
                                 mobile_layout = mobile_layout)
@@ -228,18 +240,22 @@ def center():
 def right():
     """Display right-leaning sources and log page events from POST requests."""
 
-     # Log data from POST request
+     # Log data from POST requests
     if request.method == "POST":
         log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page
     else:
+
+        # Determine CCPA banner configuration based on user IP
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
         desktop_layout = int(user_id[0:10], 16) % 8
         mobile_layout = int(user_id[10:20], 16) % 4
+
+        # Get stories from selected sources and display
         stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
         return render_template('right.html', stories=stories,
                                 desktop_layout=desktop_layout,
@@ -250,18 +266,22 @@ def right():
 def international():
     """Display international sources and log page events from POST requests."""
 
-     # Log data from POST request
+     # Log data from POST requests
     if request.method == "POST":
         log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
-    # Display page
+    # Display page during GET requests
     else:
+
+        # Determine CCPA banner configuration based on user IP
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
         desktop_layout = int(user_id[0:10], 16) % 8
         mobile_layout = int(user_id[10:20], 16) % 4
+
+        # Get stories from selected sources and display
         stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])
         return render_template('international.html', stories=stories,
                                 desktop_layout=desktop_layout,
@@ -270,9 +290,14 @@ def international():
 
 @app.route('/privacypolicy/', methods = ['GET', 'POST'])
 def privacy_policy():
+    """Displays privacy policy and provides method to opt-out from the study"""
+
+    # Log data from POST requests
     if request.method == "POST":
         log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
+
+    # Display page
     else:
         return render_template('privacypolicy.html')
 
