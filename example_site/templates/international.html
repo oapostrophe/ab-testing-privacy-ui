@@ -158,7 +158,7 @@ function getCookie(cname) {
       <div class="column">
          <div class="card">
           <h3><center><strong>{{ story.source_name }}</strong></center></h3>
-          <div class="div1"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
+          <div class="div1" onclick="logBeacon('click', '{{ story.url }}');"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
           <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
         </div>
       </div>
@@ -177,13 +177,13 @@ function getCookie(cname) {
     <button type="button" onclick="enableScroll(), myFunction(), logEvent('click', 'button1_accept_cookies');">
       Accept cookies
     </button>
-    <button type="button" id="button2" onclick="myFunction()">
+    <button type="button" id="button2" onclick="myFunction(), logEvent('click', 'button2_do_not_sell')">
       Do not sell my information
     </button>
     </center>
   </div>
   </div>
   <div class="footer">
-    <p><a href="/privacypolicy/">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked()">Do Not Sell My Personal Information</a></p>
+    <p><a href="/privacypolicy/" onclick="navigator.sendBeacon(`${window.location}`, makeData('click', 'link_privacy_policy'))">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked(), logEvent('click', 'link_do_not_sell');">Do Not Sell My Personal Information</a></p>
   </div>
 {% endblock %}

@@ -23,9 +23,6 @@ try:
 except:
     last_updated = 0
 
-# Initialize array for logging page data in memory
-events = []
-
 
 class Story(db.Model):
     """Database object to store retrieved stories.
@@ -51,10 +48,9 @@ class Story(db.Model):
         return "<Story %r>" % self.id
 
 
-def log_event(events, request):
+def log_event(request):
     """Log page events such as opening, closing, and clicks
     
-    :param events: (list) Current events list, appends event here.
     :param request: Flask request object
     """
     # Get IP and convert to string
@@ -82,7 +78,7 @@ def get_stories(sources=None):
 
     # Automatically update database if needed
     if db.session.query(Story).count() == 0 \
-        or (time.time() - last_updated) > 3600:
+        or (time.time() - last_updated) > 43200:
         refresh_stories()
 
     # Display all stories if given default sources value
@@ -138,8 +134,8 @@ def refresh_stories():
         db.session.commit()
 
     # Add 3 stories from each NewsAPI source
-    add_stories('vice-news', 3)
-    add_stories('the-washington-post', 3)
+    add_stories('the-huffington-post', 3)
+    add_stories('politico', 3)
     add_stories('usa-today', 3)
     add_stories('cnn', 3)
     add_stories('the-washington-times', 3)
@@ -164,7 +160,7 @@ def index():
 
     # Log data from POST request
     if request.method == "POST":
-        log_event(events, request)
+        log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
         
     # Display home page upon GET request
@@ -187,12 +183,12 @@ def left():
 
     # Log data from POST request
     if request.method == "POST":
-        log_event(events, request)
+        log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page
     else:
-        stories = get_stories(sources = ["Vice News", "The Washington Post"])
+        stories = get_stories(sources = ["The Huffington Post", "Politico"])
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
@@ -209,13 +205,12 @@ def center():
 
      # Log data from POST request
     if request.method == "POST":
-        log_event(events, request)
+        log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page
     else:
         stories = get_stories(sources = ["USA Today", "CNN"])
-        stories = get_stories(sources = ["Vice News", "The Washington Post"])
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
@@ -232,7 +227,7 @@ def right():
 
      # Log data from POST request
     if request.method == "POST":
-        log_event(events, request)
+        log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page
@@ -248,18 +243,13 @@ def right():
                                 mobile_layout = mobile_layout)
 
 
-@app.route('/privacypolicy/')
-def privacypolicy():
-    return render_template('privacypolicy.html')
-
-
 @app.route('/international/', methods = ['GET', 'POST'])
 def international():
     """Display international sources and log page events from POST requests."""
 
      # Log data from POST request
     if request.method == "POST":
-        log_event(events, request)
+        log_event(request)
         return make_response(jsonify({"message":"ok"}), 200)
     
     # Display page
@@ -273,6 +263,21 @@ def international():
         return render_template('international.html', stories=stories,
                                 desktop_layout=desktop_layout,
                                 mobile_layout = mobile_layout)
+
+
+@app.route('/privacypolicy/', methods = ['GET', 'POST'])
+def privacy_policy():
+    if request.method == "POST":
+        log_event(request)
+        return make_response(jsonify({"message":"ok"}), 200)
+    else:
+        return render_template('privacypolicy.html')
+
+
+@app.route('/optout/')
+def opt_out():
+    """Page to indicate user has opted out of the study."""
+    return render_template('optout.html')
 
 
 if __name__ == "__main__":

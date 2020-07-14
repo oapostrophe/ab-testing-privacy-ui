@@ -2,8 +2,6 @@
 
 {% block head %}
 <link href={{ url_for('static', filename = 'main1.css') }} rel="stylesheet" type="text/css" media="all">
-<script type="text/javascript" src="static\js\main.js">
-</script>
 {% endblock %}
 
 {% block body %}
@@ -25,7 +23,7 @@
       <div class="column">
          <div class="card">
           <h3><center><strong>{{ story.source_name }}</strong></center></h3>
-          <div class="div1" onclick="logEvent('click', '{{ story.url }}');"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
+          <div class="div1" onclick="logBeacon('click', '{{ story.url }}');"><a href="{{ story.url }}" target="_blank"><figure><center><img style="width:100%" src= {{ story.image_url }}></figure></center><figcaption><b>{{ story.title }}</b></figcaption></a></div>
           <p style="font-size: 12px;"><i>{{ story.description }}</i><p>
         </div>
       </div>
@@ -49,5 +47,6 @@
     </div>
 </div>
 <div class="footer">
-  <p><a href="/privacypolicy/">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked()">Do Not Sell My Personal Information</a></p>
+  <p><a href="/privacypolicy/" onclick="logBeacon('click', 'link_privacy_policy')">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" href="#" onclick="linkClicked(), logEvent('click', 'link_do_not_sell');">Do Not Sell My Personal Information</a></p>
+</div>
 {% endblock %}

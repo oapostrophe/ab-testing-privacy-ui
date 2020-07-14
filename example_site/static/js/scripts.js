@@ -1,6 +1,3 @@
-//Set global variable for mobile
-
-
 /* Use to log page events by sending a POST request to server. Can't
 log page unload due to asynchronous running - page finishes closing
 before the request can receive a response. Use "navigator.sendbeacon"
@@ -21,8 +18,22 @@ function logEvent(event_type, element_id="na") {
       'content-type': 'application/json'})
     });
 }
+
+/* Use if logging an event that will trigger the page unloading, such as
+clicking on a link or closing the page.  Logs event using navigator.sendBeacon,
+which will send without waiting for a response and thus complete even if the
+page unloads.  Avoid using when not necessary due to possible unreliability
+of the beacon API.
+
+:param event_type: (str) - Type of event to log, currently used values are 
+"page_load", "page_unload", "page_show", "page_hide", and "click."
+:param element_id: (str) Optional element_id, currently used for "click" 
+events to identify what was clicked on.  Defaults to "none."  */
+function logBeacon(event_type, element_id="na") {
+  navigator.sendBeacon(`${window.location}`, makeData(event_type, element_id));
+}
     
-/* Use if calling "navigator.sendbeacon" to log an event.  Makes a 
+/*   Makes a 
 string with the timestamp, event type, and element id which the
 server can receive through a POST request and process.
 
@@ -33,9 +44,9 @@ events to identify what was clicked on.  Defaults to "none." */
 function makeData(event_type, element_id="na") 
 {
   // Set banner style to "none" value if undefined
-  if(typeof banner_style == 'undefined')
+  if(typeof bannerStyle == 'undefined')
   {
-    banner_style = 'nobanner';
+    bannerStyle = 'nobanner';
   }
 
   // Get time in ms, round to 1/10th second due to browser imprecision
@@ -44,25 +55,18 @@ function makeData(event_type, element_id="na")
   timestamp = String(timestamp);
     
   // Compile parameters into JSON object
-  var data = timestamp + ";;;" + event_type + ";;;" + element_id + ";;;" + banner_style + ";;;" + navigator.userAgent + ";;;" + String(mobile);
+  var data = timestamp + ";;;" + event_type + ";;;" + element_id + ";;;" + bannerStyle + ";;;" + navigator.userAgent + ";;;" + String(mobile);
   return data;
 }
 
-// listener for page load
+// Listener for page load
 window.addEventListener("load", function(){
-  navigator.sendBeacon(`${window.location}`, 
-    makeData("window_load"))});
+  logBeacon("window_load")});
 
-/* Extra listeners to try catching iOS events */
+// Log every 1 second while page is active
 window.setInterval(function(){logEvent("page_active");}, 1000);
 
-
-
-
-
-          
 // Script to log focus changes
-
 var browserPrefixes = ['moz', 'ms', 'o', 'webkit'],
 isVisible = true; // internal flag, defaults to true
 
@@ -101,8 +105,7 @@ function onVisible() {
   }
 
   // send page focus event to server
-    navigator.sendBeacon(`${window.location}`, 
-    makeData("page_focus"));
+    logBeacon("page_focus");
 
   // change flag value
   isVisible = true;
@@ -113,8 +116,7 @@ function onHidden() {
   if(!isVisible) {
     return;
   }
-    navigator.sendBeacon(`${window.location}`, 
-    makeData("page_blur"));
+    logBeacon("page_blur");
 
   // change flag value
   isVisible = false;
