@@ -48,10 +48,13 @@ class Story(db.Model):
         return "<Story %r>" % self.id
 
 
-def log_event(request):
+def log_event(request, get=False):
     """Log page events such as opening, closing, and clicks
     
     :param request: Flask request object
+    :param get: (bool) True if request isa  GET, false if POST.  Should only be
+    true when logging the initial visit that has an Mturk survey id, all other
+    events will be through POST requests.
     """
 
     # Get IP and convert to string
@@ -61,12 +64,20 @@ def log_event(request):
     # Hash IP into user ID
     user_id = hashlib.sha256(user_id).hexdigest()
 
-    # Log data to console
-    data = str(request.data)[2:-1].split(';;;')
-    log = [user_id, request.url, data[0], data[1], data[2], data[3], data[4],
-            data[5]]
-    print('"'+log[0]+'",'+'"'+log[1]+'",'+'"'+log[2]+'",'+'"'+log[3]+'",'+'"'+log[4]+'",'+
-    '"'+log[5]+'",'+'"'+log[6]+'",'+'"'+log[7]+'",')
+    # Log data to console if POST request
+    if get == False:
+        data = str(request.data)[2:-1].split(';;;')
+        log = [user_id, request.url.split("?")[0], data[0], data[1], data[2], data[3], data[4],
+                data[5]]
+        print('"'+log[0]+'",'+'"'+log[1]+'",'+'"'+log[2]+'",'+'"'+log[3]+'",'+
+              '"'+log[4]+'",'+'"'+log[5]+'",'+'"'+log[6]+'",'+'"'+log[7]+'",')
+
+    # Log event to link survey ID on GET request
+    else:
+        log = [user_id, request.url.split("?")[0], str(round(time.time(), 1)), "survey_id", 
+                request.args["id"], "nobanner", "na", "na"]
+        print('"'+log[0]+'",'+'"'+log[1]+'",'+'"'+log[2]+'",'+'"'+log[3]+'",'+
+              '"'+log[4]+'",'+'"'+log[5]+'",'+'"'+log[6]+'",'+'"'+log[7]+'",')
 
 
 def get_stories(sources=None):
@@ -169,6 +180,11 @@ def index():
         
     # Display page for GET requests
     else:
+        # Log survey id if present
+        try:
+            log_event(request, True)
+        except:
+            pass
 
         # Determine CCPA banner configuration based on user IP
         user_id = str(request.remote_addr)[2:-1]
