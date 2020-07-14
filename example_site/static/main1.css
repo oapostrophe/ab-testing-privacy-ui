@@ -154,4 +154,5 @@ li a:hover:not(.active) {
   color: black;
   background-color: transparent;
   text-decoration: none;
+  cursor: pointer;
 }
