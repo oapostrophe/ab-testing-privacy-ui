@@ -4,7 +4,7 @@ before the request can receive a response. Use "logBeacon" for these events
 instead.
         
 :param eventType: (str) - Type of event to log, currently used values are 
-"page_load", "page_unload", "page_blur", "page_focus", and "click."
+"page_load", "page_unload", "page_blur", "page_focus", "survey_id" and "click."
 :param elementId: (str) Optional element_id, currently used for "click" 
 events to identify what was clicked on. Default value "na"  */
 function logEvent(eventType, elementId="na") {
@@ -36,7 +36,7 @@ request.  Values are separated by triple semicolons (;;;).  The following is
 included:
   **timestamp - Epoch time of event in seconds.  Rounded to 1/10th of a second.
   **event type - Type of event.  Currently used values are "page_load", 
-  "page_unload", "page_blur", "page_focus", and "click."
+  "page_unload", "page_blur", "page_focus", "survey_id" and "click."
   **element id - description of what was clicked on for click events
   **bannerStyle - Number describing style of CCPA banner displayed, if any.
   **navigator.userAgent - User Agent string from browser
