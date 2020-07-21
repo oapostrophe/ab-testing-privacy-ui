@@ -36,7 +36,7 @@ The values are in the following order:
 3. Timestamp - A timestamp of the event, in seconds, rounded to the nearest 1/10th of a second.  Timestamp is in Epoch time format.
 4. Event Type - The type of event occurring.  The following events are logged:
 "click" - user clicks on a page Element
-"page_load" - Triggered when page finishes loading, this may occur before the user actually sees the page when IOS pre-loads the page
+"window_load" - Triggered when page finishes loading, this may occur before the user actually sees the page when IOS pre-loads the page
 as the user types the URL in the browser.  Marks the start of a user's visit.
 "page_unload" - Triggered by the page being closed, this will not be logged for all visits as mobile devices don't usually trigger an
 unload event.  Marks the end of a user's visit.

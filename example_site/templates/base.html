@@ -15,11 +15,11 @@
         var mobileLayout = {{ mobile_layout }};
         if (window.innerWidth < 500){
         var mobile = true;
-        var bannerStyle = desktopLayout;
+        var bannerStyle = mobileLayout;
         }
         else{
         var mobile = false;
-        var bannerStyle = mobileLayout;
+        var bannerStyle = desktopLayout;
         }
     </script>
     <script src = {{ url_for('static', filename='js/scripts.js') }}>
