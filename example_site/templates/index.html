@@ -68,7 +68,7 @@
             Personalized Advertising
           </td>
           <td>
-            <label class="switch"><input type="checkbox" onclick="logEvent('click', 'slider_personalized_advertising');"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_personalized_advertising');"><span class="slider"></span></label>
           </td>
         </tr>
         <tr>
@@ -76,7 +76,7 @@
             Analytics
           </td>
           <td>
-            <label class="switch"><input type="checkbox" onclick="logEvent('click', 'slider_analytics');"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_analytics');"><span class="slider"></span></label>
           </td>
         </tr>
         <tr>
@@ -84,7 +84,7 @@
             Social Media
           </td>
           <td>
-            <label class="switch"><input type="checkbox" onclick="logEvent('click', 'slider_social_media');"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_social_media');"><span class="slider"></span></label>
           </td>
         </tr>
       </table>
@@ -94,12 +94,8 @@
     </div>
     <div id="one_button" class="cookie-banner-container">
       <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span><center>
-        <b>Privacy Notice</b><br>
-        When you visit our website, we may collect personal information like cookies, IP addresses, geolocation, etc. The information is used to provide you with a more personalized experience by adapting our content and advertising, providing social media features, and analyzing the behavior of our visitors.<br>
-        In some cases, the personal information may be shared with third-parties and qualify as a “sale of personal information” under the California Consumer Privacy Act (CCPA). You can exercise your right to opt-out of that sharing at any time below.<br>
-        Please note that, after opting out, you will still see ads and those ads may be less relevant to you. Additionally, your opt-out choice on this website will only apply to the current website.<br>
-        You can learn more about the data that we collect and how we manage it in our privacy policy.
-      <button style="display:block" type="button" id="button0" onclick="myClose(), logEvent('click', 'button_do_not_sell');">
+        California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
+      <button style="display:block" type="button" id="button0" onclick="myClose()">
         Do Not Sell My Information
       </button></center>  
     </div>
