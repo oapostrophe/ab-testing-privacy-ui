@@ -30,35 +30,35 @@
       {% endfor %}
     </div><center>
     <div id = "notification" class ="cookie-banner-container">
-      <span class="close" onclick="myClose()"> ✕ </span>
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span>
       <p id="text" style="font-size:12px;">
         California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
       </p>
-      <button style="min-width: 315px" type="button" id="button1" onclick="myFunction(), logEvent('click', 'button1_accept_cookies');">
+      <button style="min-width: 315px" type="button" id="button1" onclick="myFunction(), logEvent('click', 'button_accept_cookies');">
         Accept cookies
       </button>
-      <button style="min-width: 315px" type="button" id="button2"  onclick="myFunction(), logEvent('click', 'button2_do_not_sell');">
+      <button style="min-width: 315px" type="button" id="button2"  onclick="myFunction(), logEvent('click', 'button_do_not_sell');">
         Do not sell my information
       </button>
       </center>
     </div>
     <div id= "form" class="cookie-banner-container" style="z-index: 1000;">
-      <span class="close" onclick= "myClose()"> ✕ </span>
+      <span class="close" onclick= "myClose(), logEvent('click', 'button_x_form');"> ✕ </span>
       <center><b style="font-size: 24px;">California Consumer Privacy Opt-Out provision (Act)</b></center>
       <p>By submitting this request you are exercising your right to Opt Out of sale of your personal information. To learn more about what kinds of information we gather in connection with this website and/or its associated services, please consult our <a target="_blank" href="/privacypolicy/" class = "link_in_text" onclick="logBeacon('click', 'link_privacy_policy')">Privacy Policy</a></p>
       <label for="fname">Email:</label>
       <input type="text" id="fname" name="fname" value=""><br>
       <br>
       <label for="yes_no_radio">Are you a California resident?</label>
-      <p> <input style="font-size: 12px;" type="radio" name="yes_no">Yes</input></p>
-      <p><input style="font-size: 12px;" type="radio" name="yes_no">No</input></p>
-      <center><button style="display:block" type="button" onclick="myClose()">
+      <p> <input style="font-size: 12px;" type="radio" name="yes_no" value="ca_resident_yes">Yes</input></p>
+      <p><input style="font-size: 12px;" type="radio" name="yes_no" value="ca_resident_no">No</input></p>
+      <center><button style="display:block" type="button" onclick="myClose(), logEvent('click', 'submit_form'), logEvent('form_input', checkValidEmail(document.getElementById('fname').value)), logEvent('form_input', getRadioInput('yes_no'));">
         Submit response
       </button>
       </center>
     </div>
     <div id="toggle" class="cookie-banner-container" style="z-index: 1000;">
-      <span class="close" onclick="myClose()"> ✕ </span>
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x_toggle');"> ✕ </span>
       <p id="text">
         California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising. You can opt out of the sale of your personal information for each purpose through the toggles below.  You can find out more in our privacy policy at the bottom of any page.
       </p>
@@ -68,7 +68,7 @@
             Personalized Advertising
           </td>
           <td>
-            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" onclick="logEvent('click', 'slider_personalized_advertising');"><span class="slider"></span></label>
           </td>
         </tr>
         <tr>
@@ -76,7 +76,7 @@
             Analytics
           </td>
           <td>
-            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" onclick="logEvent('click', 'slider_analytics');"><span class="slider"></span></label>
           </td>
         </tr>
         <tr>
@@ -84,22 +84,22 @@
             Social Media
           </td>
           <td>
-            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" onclick="logEvent('click', 'slider_social_media');"><span class="slider"></span></label>
           </td>
         </tr>
       </table>
-      <center><button style="display:block" type="button" id="button0" onclick="myClose()">
+      <center><button style="display:block" type="button" id="button0" onclick="myClose(), logEvent('click', 'button_submit_response');">
         Submit response
       </button></center>  
     </div>
     <div id="one_button" class="cookie-banner-container">
-      <span class="close" onclick="myClose()"> ✕ </span><center>
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span><center>
         <b>Privacy Notice</b><br>
         When you visit our website, we may collect personal information like cookies, IP addresses, geolocation, etc. The information is used to provide you with a more personalized experience by adapting our content and advertising, providing social media features, and analyzing the behavior of our visitors.<br>
         In some cases, the personal information may be shared with third-parties and qualify as a “sale of personal information” under the California Consumer Privacy Act (CCPA). You can exercise your right to opt-out of that sharing at any time below.<br>
         Please note that, after opting out, you will still see ads and those ads may be less relevant to you. Additionally, your opt-out choice on this website will only apply to the current website.<br>
         You can learn more about the data that we collect and how we manage it in our privacy policy.
-      <button style="display:block" type="button" id="button0" onclick="myClose()">
+      <button style="display:block" type="button" id="button0" onclick="myClose(), logEvent('click', 'button_do_not_sell');">
         Do Not Sell My Information
       </button></center>  
     </div>

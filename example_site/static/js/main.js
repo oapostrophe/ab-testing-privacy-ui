@@ -32,7 +32,6 @@ function determine_layout() {
   ///if (String(acceptCookies)=="1"){
     ///x.style.display="none";
   /// }
-  desktopLayout=5;
   if (mobile == false){
     x.style.bottom=screenHeight;
     x.style.left = "";
@@ -49,10 +48,10 @@ function determine_layout() {
       button1.style.color="white";
     }
     else if (String(desktopLayout) == "2"){
-      button2.setAttribute("onClick", "javascript: myForm()");
+      button2.setAttribute("onClick", "javascript: myForm(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(desktopLayout) == "3"){
-      button2.setAttribute("onClick", "javascript: myToggle()");
+      button2.setAttribute("onClick", "javascript: myToggle(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(desktopLayout) == "4"){
       x.style.display="none";
@@ -85,10 +84,10 @@ function determine_layout() {
       button1.style.color="white";
     }
     else if (String(mobileLayout)=="2"){
-      button2.setAttribute("onClick", "javascript: myForm()");
+      button2.setAttribute("onClick", "javascript: myForm(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(mobileLayout)=="3"){
-      button2.setAttribute("onClick", "javascript: myToggle()");
+      button2.setAttribute("onClick", "javascript: myToggle(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(mobileLayout)=="4"){
       x.style.display="none";
