@@ -26,13 +26,15 @@ function determine_layout() {
   var form= document.getElementById("form");
   var toggle=document.getElementById("toggle");
   var one_button=document.getElementById("one_button");
+  var form_input=document.getElementById("form_input")
   ///form.style.display="none";
   x.style.display="block";
  
-  ///if (String(acceptCookies)=="1"){
-    ///x.style.display="none";
-  /// }
+  if (String(acceptCookies)=="1"){
+    return;
+  }
   desktopLayout=3;
+  mobileLayout=2;
   if (mobile == false){
     x.style.bottom=screenHeight;
     x.style.left = "";
@@ -86,13 +88,15 @@ function determine_layout() {
     else if (String(mobileLayout)=="2"){
       form.style.maxWidth="380px";
       button2.setAttribute("onClick", "javascript: myForm()");
+      form_input.setAttribute("onClick", "javascript: myFixForm()");
+      one_button.style.display="none";
     }
     else if (String(mobileLayout)=="3"){
       button2.setAttribute("onClick", "javascript: myMobileToggle()");
     }
     else if (String(mobileLayout)=="4"){
       x.style.display="none";
-      var screenHeight=String(window.innerHeight -650)+"px";
+      var screenHeight=String(window.innerHeight -600)+"px";
       toggle.style.bottom=screenHeight;
       toggle.style.left = "";
       toggle.style.right="24px";
@@ -137,6 +141,7 @@ function readMore(){
   ///button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), endOverlay();" )
 }
 function myClose() {
+  document.cookie="acceptCookies=1; path=/; ";
   var x=document.getElementById("notification");
   var overlay=document.getElementById("myNav");
   var form=document.getElementById("form");
@@ -149,7 +154,7 @@ function myClose() {
   overlay.style.display="none";
 }
 function myFunction() {
-  ///document.cookie="acceptCookies=1; path=/; ";
+  document.cookie="acceptCookies=1; path=/; ";
   var toggle=document.getElementById("toggle");
   var form=document.getElementById("form");
   var x = document.getElementById("notification");
@@ -162,7 +167,12 @@ function myFunction() {
     x.style.display = "none";
   }
 }
- 
+function myFixForm(){
+  var toggle=document.getElementById("toggle");
+  toggle.style.display="none";
+  var middleScreenHeight=String((window.innerHeight)/3-150)+"px";
+  form.style.bottom=middleScreenHeight;
+}
 function myForm(){
   var x= document.getElementById("notification");
   var overlay=document.getElementById("myNav")
@@ -192,8 +202,8 @@ function myMobileToggle(){
   var overlay=document.getElementById("myNav")
   overlay.style.display="block";
   x.style.display="none";
-  var screenHeight=String(window.innerHeight -650)+"px";
-  var middleScreenHeight=String((window.innerHeight)/3)+"px";
+  var screenHeight=String(window.innerHeight -750)+"px";
+  var middleScreenHeight=String(((window.innerHeight)/3)-100)+"px";
   var toggle=document.getElementById("toggle");
   toggle.style.bottom=middleScreenHeight;
   toggle.style.left = "24px";

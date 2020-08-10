@@ -8,89 +8,114 @@ function disableScroll() {
   // Get the current page scroll position 
   scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
   scrollLeft = window.pageXOffset || document.documentElement.scrollLeft, 
-
+ 
   // if any scroll is attempted, set this to the previous value 
   window.onscroll = function() { 
     window.scrollTo(scrollLeft, scrollTop); 
     }; 
 } 
-
+ 
 function enableScroll() { 
   window.onscroll = function() {}; 
 } 
-
+ 
 function determine_layout() {
   var x = document.getElementById("notification");
   var overlay=document.getElementById("myNav");
+  var button1 = document.getElementById("button1");
   var button2 = document.getElementById("button2");
   var screenWidthString=String(window.innerWidth+100)+"px";
   var screenHeight=String(window.innerHeight -340)+"px";
   var bannerScreenHeight=String(window.innerHeight-200)+"px";
   var middleScreenHeight=String((window.innerHeight)/3)+"px";
   var acceptCookies = getCookie("acceptCookies")
+  var form= document.getElementById("form");
+  var toggle=document.getElementById("toggle");
+  var one_button=document.getElementById("one_button");
+  var form_input=document.getElementById("form_input")
+  ///form.style.display="none";
   x.style.display="block";
+ 
   if (String(acceptCookies)=="1"){
-    x.style.display="none";
+    return;
   }
+  desktopLayout=3;
+  mobileLayout=2;
   if (mobile == false){
+    x.style.bottom=screenHeight;
+    x.style.left = "";
+    x.style.right="10px"
     if (String(desktopLayout) == "0"){
-      x.style.bottom="10px";
-      x.style.left = "10px";
-      x.style.right="";
+      
     }
-    if (String(desktopLayout) == "1"){
-      x.style.bottom="10px";
-      x.style.left = "24px";
-      x.style.right="24px";
-      x.style.maxWidth=screenWidthString;
+    else if (String(desktopLayout) == "1"){
+      button2.style.fontWeight="normal";
+      button2.style.background="skyblue";
+      button2.style.border="1px solid black"
+      button1.style.background="darkblue";
+      button1.style.border="1px solid white"
+      button1.style.color="white";
     }
-    if (String(desktopLayout) == "2"){
-      x.style.bottom="10px";
-      x.style.left = "";
-      x.style.right="10px"
+    else if (String(desktopLayout) == "2"){
+      button2.setAttribute("onClick", "javascript: myForm()");
     }
-    if (String(desktopLayout) == "3"){
-      x.style.bottom=screenHeight;
-      x.style.left = "10px";
-      x.style.right="";
+    else if (String(desktopLayout) == "3"){
+      button2.setAttribute("onClick", "javascript: myToggle()");
     }
-    if (String(desktopLayout) == "4"){
-      x.style.bottom=bannerScreenHeight;
-      x.style.left = "24px";
-      x.style.right="24px";
-      x.style.maxWidth=screenWidthString;
-    }
-    if (String(desktopLayout) == "5"){
-      x.style.bottom=screenHeight;
-      x.style.left = "";
-      x.style.right="10px"
-    }
-    if (String(desktopLayout) == "6"){
-      x.style.bottom=middleScreenHeight;
-      x.style.left = "24px";
-      x.style.right="24px";
-    }
-    if (String(desktopLayout)=="7"){
+    else if (String(desktopLayout) == "4"){
       x.style.display="none";
+      var screenHeight=String(window.innerHeight -530)+"px";
+      toggle.style.bottom=screenHeight;
+      toggle.style.left = "";
+      toggle.style.right="24px";
+    }
+    else if (String(desktopLayout) == "5"){
+      x.style.display="none";
+      one_button.style.bottom=screenHeight;
+      one_button.style.left="";
+      one_button.style.right="10px";
     }
   }
   else{
+    x.style.bottom=middleScreenHeight
     x.style.left = "24px";
     x.style.right="24px";
     if (String(mobileLayout)=="0"){
-      x.style.bottom="10px"
+      
     }
-    if (String(mobileLayout)=="1"){
-      x.style.bottom=middleScreenHeight;
+    else if (String(mobileLayout)=="1"){
+      button2.style.fontWeight="normal";
+      button2.style.background="skyblue";
+      button2.style.border="1px solid black"
+      button1.style.background="darkblue";
+      button1.style.border="1px solid white"
+      button1.style.color="white";
     }
-    if (String(mobileLayout)=="2"){
-      x.style.bottom=screenHeight;
+    else if (String(mobileLayout)=="2"){
+      form.style.maxWidth="380px";
+      button2.setAttribute("onClick", "javascript: myForm()");
+      form_input.setAttribute("onClick", "javascript: myFixForm()");
+      one_button.style.display="none";
     }
-    if (String(mobileLayout)=="3"){
+    else if (String(mobileLayout)=="3"){
+      button2.setAttribute("onClick", "javascript: myMobileToggle()");
+    }
+    else if (String(mobileLayout)=="4"){
       x.style.display="none";
+      var screenHeight=String(window.innerHeight -600)+"px";
+      toggle.style.bottom=screenHeight;
+      toggle.style.left = "";
+      toggle.style.right="24px";
+    }
+    else if (String(mobileLayout)=="5"){
+      x.style.display="none";
+      one_button.style.bottom=screenHeight;
+      one_button.style.left="";
+      one_button.style.right="10px";
     }
   }
 }
+ 
 function linkClicked(){
   var x = document.getElementById("notification");
   var middleScreenHeight=String((window.innerHeight)/3)+"px"
@@ -100,27 +125,117 @@ function linkClicked(){
   x.style.right="24px";
   x.style.maxWidth="400px";
 }
-
+ 
 function endOverlay(){
   var overlay=document.getElementById("myNav");
   overlay.style.display="none"
 }
 function readMore(){
+  var link_accept=document.getElementById("link_accept")
+  var button0=document.getElementById("button0");
+  var button1=document.getElementById("button1");
   var button2 = document.getElementById("button2");
+  var options= document.getElementById("options");
   var text = document.getElementById("text");
   text.innerHTML="Under the California Consumer Privacy Act, you have the right to opt-out of the sale of your personal information to third parties. You may exercise your right to opt out of the sale of personal information by clicking the 'Deny Cookies' button.";
-  button2.innerHTML="Don't allow";
-  button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), endOverlay();" )
+  button1.style.display="none";
+  button2.style.display="none";
+  options.style.display="block";
+  button0.style.display="block";
+  link_accept.style.display="none";
+  ///button2.innerHTML="Don't allow";
+  ///button2.setAttribute( "onClick", "javascript: myFunction(), enableScroll(), endOverlay();" )
+}
+function myClose() {
+  document.cookie="acceptCookies=1; path=/; ";
+  var x=document.getElementById("notification");
+  var overlay=document.getElementById("myNav");
+  var form=document.getElementById("form");
+  var toggle=document.getElementById("toggle");
+  var one_button=document.getElementById("one_button");
+  x.style.display="none";
+  form.style.display="none";
+  toggle.style.display="none";
+  one_button.style.display="none";
+  overlay.style.display="none";
 }
 function myFunction() {
-  document.cookie="acceptCookies=1; path=/;";
+  document.cookie="acceptCookies=1; path=/; ";
+  var toggle=document.getElementById("toggle");
+  var form=document.getElementById("form");
   var x = document.getElementById("notification");
+  toggle.style.display="none";
+  form.style.display="none";
   if (x.style.display === "none") {
     x.style.display = "block";
   } 
   else {
     x.style.display = "none";
   }
+}
+function myFixForm(){
+  var toggle=document.getElementById("toggle");
+  toggle.style.display="none";
+  var middleScreenHeight=String((window.innerHeight)/3-150)+"px";
+  form.style.bottom=middleScreenHeight;
+}
+function myForm(){
+  var x= document.getElementById("notification");
+  var overlay=document.getElementById("myNav")
+  overlay.style.display="block";
+  x.style.display="none";
+  var middleScreenHeight=String((window.innerHeight)/3-50)+"px";
+  var screenHeight=String(window.innerHeight -530)+"px";
+  var form=document.getElementById("form");
+  form.style.bottom=middleScreenHeight;
+  form.style.left = "10px";
+  form.style.right="10px";
+}
+function myToggle(){
+  var x = document.getElementById("notification");
+  var overlay=document.getElementById("myNav")
+  overlay.style.display="block";
+  x.style.display="none";
+  var screenHeight=String(window.innerHeight -530)+"px";
+  var middleScreenHeight=String((window.innerHeight)/3)+"px";
+  var toggle=document.getElementById("toggle");
+  toggle.style.bottom=middleScreenHeight;
+  toggle.style.left = "24px";
+  toggle.style.right="24px";
+}
+function myMobileToggle(){
+  var x = document.getElementById("notification");
+  var overlay=document.getElementById("myNav")
+  overlay.style.display="block";
+  x.style.display="none";
+  var screenHeight=String(window.innerHeight -750)+"px";
+  var middleScreenHeight=String(((window.innerHeight)/3)-100)+"px";
+  var toggle=document.getElementById("toggle");
+  toggle.style.bottom=middleScreenHeight;
+  toggle.style.left = "24px";
+  toggle.style.right="24px";
+}
+function myDirectToggle(){
+  var x = document.getElementById("notification");
+  x.style.display="none";
+  var screenHeight=String(window.innerHeight -530)+"px";
+  var middleScreenHeight=String((window.innerHeight)/3)+"px";
+  var toggle=document.getElementById("toggle");
+  toggle.style.bottom=screenHeight;
+  toggle.style.left = "";
+  toggle.style.right="24px";
+}
+ 
+ 
+function one_button(){
+  var x=document.getElementById("notification")
+  var screenHeight=String(window.innerHeight -350)+"px";
+  var middleScreenHeight=String((window.innerHeight)/3)+"px";
+  var one_button=document.getElementById("one_button");
+  x.style.display="none";
+  one_button.style.bottom=screenHeight;
+  one_button.style.left="";
+  one_button.style.right="10px";
 }
     
 function getCookie(cname) {
@@ -148,11 +263,12 @@ function getCookie(cname) {
     <li><a href="/right/">Right-Wing</a></li>
     <li><a href="/international/">International</a></li>
   </ul>
+  <div id="myNav" class="overlay">
+    <div class="overlay-content">
+    </div>
+  </div>
 <div class = "content">
-    <h1 style="text-align: center">Left-Wing Stories</h1>
-    {% if stories|length < 1 %}
-    <a href="/">Refresh stories</a>
-    {% else %}
+    <h1 style="text-align: center">Trending Stories</h1>
     <div class="row">
       {% for story in stories %}
       <div class="column">
@@ -163,27 +279,80 @@ function getCookie(cname) {
         </div>
       </div>
       {% endfor %}
+    </div><center>
+    <div id = "notification" class ="cookie-banner-container">
+      <span class="close" onclick="myClose()"> ✕ </span>
+      <p id="text" style="font-size:12px;">
+        California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
+      </p>
+      <button style="min-width: 315px" type="button" id="button1" onclick="myFunction(), logEvent('click', 'button1_accept_cookies');">
+        Accept cookies
+      </button>
+      <button style="min-width: 315px" type="button" id="button2"  onclick="myFunction(), logEvent('click', 'button2_do_not_sell');">
+        Do not sell my information
+      </button>
+      </center>
     </div>
-    {% endif %}
-  </div>
-  <div id = "notification" class ="cookie-banner-container">
-    <p align="right">
-      <input type="button" value="X" onclick="enableScroll(), myFunction(), logEvent('click', 'button_x');"/>
-    </p>      
-    <center>
-    <p id="text" style="font-size:12px;">
-      California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing “Do not sell my personal information”  You can find out more in our privacy policy at the bottom of any page.
-    </p>
-    <button type="button" onclick="enableScroll(), myFunction(), logEvent('click', 'button1_accept_cookies');">
-      Accept cookies
-    </button>
-    <button type="button" id="button2" onclick="myFunction(), logEvent('click', 'button2_do_not_sell')">
-      Do not sell my information
-    </button>
-    </center>
-  </div>
-  </div>
-  <div class="footer">
-    <p><a href="/privacypolicy/" onclick="navigator.sendBeacon(`${window.location}`, makeData('click', 'link_privacy_policy'))">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked(), logEvent('click', 'link_do_not_sell');">Do Not Sell My Personal Information</a></p>
-  </div>
+    <div id= "form" class="cookie-banner-container" style="z-index: 1000;">
+      <span class="close" onclick= "myClose()"> ✕ </span>
+      <center><b style="font-size: 24px;">California Consumer Privacy Opt-Out provision (Act)</b></center>
+      <p>By submitting this request you are exercising your right to Opt Out of sale of your personal information. To learn more about what kinds of information we gather in connection with this website and/or its associated services, please consult our <a target="_blank" href="/privacypolicy/" class = "link_in_text" onclick="logBeacon('click', 'link_privacy_policy')">Privacy Policy</a></p>
+      <label for="fname">Email:</label>
+      <input id="form_input" type="text" id="fname" name="fname" value=""><br>
+      <br>
+      <label for="yes_no_radio">Are you a California resident?</label>
+      <p> <input style="font-size: 12px;" type="radio" name="yes_no">Yes</input></p>
+      <p><input style="font-size: 12px;" type="radio" name="yes_no">No</input></p>
+      <center><button style="display:block" type="button" onclick="myClose()">
+        Submit response
+      </button>
+      </center>
+    </div>
+    <div id="toggle" class="cookie-banner-container" style="z-index: 1000;">
+      <span class="close" onclick="myClose()"> ✕ </span>
+      <p id="text">
+        California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising. You can opt out of the sale of your personal information for each purpose through the toggles below.  You can find out more in our privacy policy at the bottom of any page.
+      </p>
+      <table>
+        <tr>
+          <td>
+            Personalized Advertising
+          </td>
+          <td>
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Analytics
+          </td>
+          <td>
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Social Media
+          </td>
+          <td>
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </td>
+        </tr>
+      </table>
+      <center><button style="display:block" type="button" id="button0" onclick="myClose()">
+        Submit response
+      </button></center>  
+    </div>
+    <div id="one_button" class="cookie-banner-container">
+      <span class="close" onclick="myClose()"> ✕ </span><center>
+        <b>Privacy Notice</b><br>
+        California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
+      <button style="display:block" type="button" id="button0" onclick="myClose()">
+        Do Not Sell My Information
+      </button></center>  
+    </div>
+</div>
+<div class="footer">
+  <p><a target="_blank" href="/privacypolicy/" onclick="logBeacon('click', 'link_privacy_policy')">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked(), logEvent('click', 'link_do_not_sell');">Do Not Sell My Personal Information</a></p>
+</div>
 {% endblock %}
