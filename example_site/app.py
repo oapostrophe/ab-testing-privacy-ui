@@ -190,8 +190,8 @@ def index():
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
-        desktop_layout = int(user_id[0:10], 16) % 8
-        mobile_layout = int(user_id[10:20], 16) % 4
+        desktop_layout = (int(user_id[0:10], 16) % 6)
+        mobile_layout = desktop_layout
 
         # Display stories
         stories = get_stories()
@@ -216,8 +216,8 @@ def left():
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
-        desktop_layout = int(user_id[0:10], 16) % 8
-        mobile_layout = int(user_id[10:20], 16) % 4
+        desktop_layout = (int(user_id[0:10], 16) % 6)
+        mobile_layout = desktop_layout
 
         # Get stories from selected sources and display
         stories = get_stories(sources = ["The Huffington Post", "Politico"])
@@ -242,8 +242,8 @@ def center():
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
-        desktop_layout = int(user_id[0:10], 16) % 8
-        mobile_layout = int(user_id[10:20], 16) % 4
+        desktop_layout = (int(user_id[0:10], 16) % 6)
+        mobile_layout = desktop_layout
 
         # Get stories from selected sources and display
         stories = get_stories(sources = ["USA Today", "CNN"])
@@ -268,8 +268,8 @@ def right():
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
-        desktop_layout = int(user_id[0:10], 16) % 8
-        mobile_layout = int(user_id[10:20], 16) % 4
+        desktop_layout = (int(user_id[0:10], 16) % 6)
+        mobile_layout = desktop_layout
 
         # Get stories from selected sources and display
         stories = get_stories(sources = ["Breitbart News", "The Washington Times"])
@@ -294,8 +294,8 @@ def international():
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
-        desktop_layout = int(user_id[0:10], 16) % 8
-        mobile_layout = int(user_id[10:20], 16) % 4
+        desktop_layout = (int(user_id[0:10], 16) % 6)
+        mobile_layout = desktop_layout
 
         # Get stories from selected sources and display
         stories = get_stories(sources = ["BBC News", "Reuters", "Al Jazeera English"])

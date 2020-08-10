@@ -51,10 +51,10 @@ function determine_layout() {
       button1.style.color="white";
     }
     else if (String(desktopLayout) == "2"){
-      button2.setAttribute("onClick", "javascript: myForm()");
+      button2.setAttribute("onClick", "javascript: myForm(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(desktopLayout) == "3"){
-      button2.setAttribute("onClick", "javascript: myToggle()");
+      button2.setAttribute("onClick", "javascript: myToggle(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(desktopLayout) == "4"){
       x.style.display="none";
@@ -87,12 +87,12 @@ function determine_layout() {
     }
     else if (String(mobileLayout)=="2"){
       form.style.maxWidth="380px";
-      button2.setAttribute("onClick", "javascript: myForm()");
-      form_input.setAttribute("onClick", "javascript: myFixForm()");
+      button2.setAttribute("onClick", "javascript: myForm(), logEvent('click', 'button_do_not_sell'");
       one_button.style.display="none";
     }
     else if (String(mobileLayout)=="3"){
-      button2.setAttribute("onClick", "javascript: myMobileToggle()");
+      button2.setAttribute("onClick", "javascript: myMobileToggle(), logEvent('click', 'button_do_not_sell');");
+
     }
     else if (String(mobileLayout)=="4"){
       x.style.display="none";

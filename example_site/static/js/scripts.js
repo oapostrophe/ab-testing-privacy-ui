@@ -62,6 +62,44 @@ function makeData(eventType, elementId="na")
   return data;
 }
 
+/* Returns the checked value of a radio input during form submission.
+ 
+ :param radioInputName: (str) HTML 'name' element of the group of radio buttons
+ */
+ function getRadioInput(radioInputName)
+ {
+  var ele = document.getElementsByName(radioInputName);       
+  for(i = 0; i < ele.length; i++) { 
+      if(ele[i].checked) {
+        return ele[i].value;
+      }
+ }
+ return "ca_resident_blank";
+}
+
+/* Checks whether a given string is a valid email address.  Returns "blank"
+if an empty string is passed in.
+
+:param email: (str) string to check if a valid email address.
+*/
+function checkValidEmail(email)
+{
+  if(email.length == 0){
+    return "blank_email";
+  }
+  atSign = false;
+  for(i=0; i < email.length; i++){
+    if(email.charAt(i) == "@"){
+      atSign = true;
+    }
+    if(atSign == true && email.charAt(i) == ".")
+    {
+      return "valid_email";
+    }
+  }
+  return "invalid_email";
+}
+
 /* Script setting event listeners to log various page events.  The following
  DOM events are recorded with the corresponding event types:
 
