@@ -328,4 +328,4 @@ if __name__ == "__main__":
     """Run dev server."""
 
     # Run Flask server
-    app.run(debug=True, host="192.168.1.239")
+    app.run(debug=True)

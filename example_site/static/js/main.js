@@ -33,8 +33,6 @@ function determine_layout() {
   if (String(acceptCookies)=="1"){
     return;
   }
-  desktopLayout=3;
-  mobileLayout=2;
   if (mobile == false){
     x.style.bottom=screenHeight;
     x.style.left = "";
