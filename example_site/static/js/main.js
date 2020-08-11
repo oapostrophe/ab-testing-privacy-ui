@@ -29,16 +29,15 @@ function determine_layout() {
   var form_input=document.getElementById("form_input")
   ///form.style.display="none";
   x.style.display="block";
- 
   if (String(acceptCookies)=="1"){
     return;
   }
   if (mobile == false){
-    x.style.bottom=screenHeight;
-    x.style.left = "";
-    x.style.right="10px"
+    x.style.left = "24px";
+    x.style.right="24px";
+    x.style.maxWidth=screenWidthString;
+    x.style.bottom=bannerScreenHeight;
     if (String(desktopLayout) == "0"){
-      
     }
     else if (String(desktopLayout) == "1"){
       button2.style.fontWeight="normal";
@@ -69,7 +68,7 @@ function determine_layout() {
     }
   }
   else{
-    x.style.bottom=middleScreenHeight
+    x.style.bottom=screenHeight
     x.style.left = "24px";
     x.style.right="24px";
     if (String(mobileLayout)=="0"){
@@ -80,12 +79,13 @@ function determine_layout() {
       button2.style.background="skyblue";
       button2.style.border="1px solid black"
       button1.style.background="darkblue";
-      button1.style.border="1px solid white"
+      button1.style.border="1px solid white";
       button1.style.color="white";
     }
     else if (String(mobileLayout)=="2"){
-      form.style.maxWidth="380px";
-      button2.setAttribute("onClick", "javascript: myForm(), logEvent('click', 'button_do_not_sell'");
+      form.style.maxWidth="310px";
+      button2.setAttribute("onClick", "javascript: myForm(), logEvent('click', 'button_do_not_sell')");
+      form_input.setAttribute("onClick", "javascript: myFixForm()");
       one_button.style.display="none";
     }
     else if (String(mobileLayout)=="3"){
@@ -102,7 +102,8 @@ function determine_layout() {
     else if (String(mobileLayout)=="5"){
       x.style.display="none";
       one_button.style.bottom=screenHeight;
-      one_button.style.left="";
+      one_button.style.maxWidth="300px";
+      one_button.style.left="10px";
       one_button.style.right="10px";
     }
   }
@@ -169,6 +170,7 @@ function myFixForm(){
   var toggle=document.getElementById("toggle");
   toggle.style.display="none";
   var middleScreenHeight=String((window.innerHeight)/3-150)+"px";
+  var form=document.getElementById("form");
   form.style.bottom=middleScreenHeight;
 }
 function myForm(){
@@ -188,7 +190,7 @@ function myToggle(){
   var overlay=document.getElementById("myNav")
   overlay.style.display="block";
   x.style.display="none";
-  var screenHeight=String(window.innerHeight -530)+"px";
+  var screenHeight=String(window.innerHeight -600)+"px";
   var middleScreenHeight=String((window.innerHeight)/3)+"px";
   var toggle=document.getElementById("toggle");
   toggle.style.bottom=middleScreenHeight;
