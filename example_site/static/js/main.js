@@ -28,6 +28,7 @@ function determine_layout() {
   var one_button=document.getElementById("one_button");
   var form_input=document.getElementById("form_input")
   ///form.style.display="none";
+
   x.style.display="block";
   if (String(acceptCookies)=="1"){
     return;
