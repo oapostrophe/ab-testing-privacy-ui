@@ -191,7 +191,7 @@ function myToggle(){
   overlay.style.display="block";
   x.style.display="none";
   var screenHeight=String(window.innerHeight -600)+"px";
-  var middleScreenHeight=String((window.innerHeight)/3)+"px";
+  var middleScreenHeight=String((window.innerHeight)/3-100)+"px";
   var toggle=document.getElementById("toggle");
   toggle.style.bottom=middleScreenHeight;
   toggle.style.left = "24px";
