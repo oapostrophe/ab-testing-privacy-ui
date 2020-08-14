@@ -88,17 +88,53 @@
           </td>
         </tr>
       </table>
-      <center><button style="display:block" type="button" id="button0" onclick="myClose(), logEvent('click', 'button_submit_response');">
+      <center><button style="display:block" type="button" onclick="myClose(), logEvent('click', 'button_submit_response');">
         Submit response
       </button></center>  
     </div>
     <div id="one_button" class="cookie-banner-container">
       <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span><center>
         California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
-      <button style="display:block" type="button" id="button0" onclick="myClose(), logEvent('click', 'button_do_not_sell');">
+      <button style="display:block" type="button" onclick="myClose(), logEvent('click', 'button_do_not_sell');">
         Do Not Sell My Information
       </button></center>  
     </div>
+    <div id="button_and_link" class="cookie-banner-container">
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span>
+        <table>
+          <tr>
+            <td>
+              <p id="text" style="font-size:12px;">
+                California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
+                </p>
+            </td>
+            <td style="width:220px; padding: 0 15px;">
+              <button style="display:block;" type="button"  onclick="myClose()">
+                Accept Cookies
+              </button>
+            </td>
+            <td style="width:200px; padding: 0 15px;">
+              <a class="policy" onclick="myToggle()">Do Not Sell My Information</a>
+            </td>
+          </tr>
+        </table> 
+    </div>
+    <div id="link_text" class="cookie-banner-container">
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span><center>
+        California residents have certain rights with regard to the sale of personal information to third parties. You can find out more in our privacy policy at the bottom of any page. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing <a id="link_in_text" class="policy" style="text-decoration: underline;"onclick="myToggle()">Do Not Sell My Information</a>.
+      <button style="display:block" type="button" onclick="myClose();">
+        Accept Cookies
+      </button></center>
+      <div id="mobile_button_and_link" class="cookie-banner-container"><center>
+        <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span>
+          <p id="text" style="font-size:12px;">
+            California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
+          </p>
+          <button style="display:block;" type="button"  onclick="myClose()">
+            Accept Cookies
+          </button>
+          <a class="policy" onclick="myToggle()">Do Not Sell My Information</a></center>
+      </div>
 </div>
 <div class="footer">
   <p><a target="_blank" href="/privacypolicy/" onclick="logBeacon('click', 'link_privacy_policy')">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked(), logEvent('click', 'link_do_not_sell');">Do Not Sell My Personal Information</a></p>
