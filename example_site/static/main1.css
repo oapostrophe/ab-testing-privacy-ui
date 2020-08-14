@@ -98,6 +98,23 @@ li a:hover:not(.active) {
 .cookie-banner-container p a{
   color: black
 }
+
+.cookie-banner-container a:link {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+.cookie-banner-container a:hover {
+  color: blue;
+  background-color: transparent;
+  text-decoration: underline;
+}
+.cookie-banner-container a:visited {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
  
 .cookie-banner-container button {
   border: 0;
