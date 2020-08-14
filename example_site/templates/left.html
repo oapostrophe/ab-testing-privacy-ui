@@ -33,6 +33,11 @@ function determine_layout() {
   var toggle=document.getElementById("toggle");
   var one_button=document.getElementById("one_button");
   var form_input=document.getElementById("form_input")
+  var button_and_link=document.getElementById("button_and_link");
+  var link_choice=document.getElementById("link_choice");
+  var link_text=document.getElementById("link_text");
+  var mobile_button_and_link=document.getElementById("mobile_button_and_link");
+  var link_in_text=document.getElementById("link_in_text");
   ///form.style.display="none";
   x.style.display="block";
   if (String(acceptCookies)=="1"){
@@ -71,6 +76,21 @@ function determine_layout() {
       one_button.style.bottom=screenHeight;
       one_button.style.left="";
       one_button.style.right="10px";
+    }
+    else if (String(desktopLayout)=="6"){
+      x.style.display="none";
+      bannerScreenHeight=String(window.innerHeight-130)+"px";
+      button_and_link.style.bottom=bannerScreenHeight;
+      button_and_link.style.maxWidth=screenWidthString;
+      button_and_link.style.left="10px";
+      button_and_link.style.right="10px";
+    }
+    else if (String(desktopLayout)=="7"){
+      x.style.display="none";
+      link_text.style.bottom=bannerScreenHeight;
+      link_text.style.maxWidth=screenWidthString;
+      link_text.style.left="10px";
+      link_text.style.right="10px";
     }
   }
   else{
@@ -112,6 +132,22 @@ function determine_layout() {
       one_button.style.left="10px";
       one_button.style.right="10px";
     }
+    else if (String(mobileLayout)=="6"){
+      x.style.display="none";
+      mobile_button_and_link.style.bottom=screenHeight;
+      mobile_button_and_link.style.maxWidth="275px";
+      link_choice.setAttribute("onClick", "javascript: myMobileToggle(), logEvent('click', 'button_do_not_sell');");
+      mobile_button_and_link.style.left="24px";
+      mobile_button_and_link.style.right="24px";
+    }
+    else if (String(mobileLayout)=="7"){
+      x.style.display="none";
+      link_in_text.setAttribute("onClick", "javascript: myMobileToggle(), logEvent('click', 'button_do_not_sell');");
+      link_text.style.bottom=screenHeight;
+      link_text.style.maxWidth="310px";
+      link_text.style.left="10px";
+      link_text.style.right="10px";
+    }
   }
 }
  
@@ -152,11 +188,17 @@ function myClose() {
   var form=document.getElementById("form");
   var toggle=document.getElementById("toggle");
   var one_button=document.getElementById("one_button");
+  var button_and_link=document.getElementById("button_and_link");
+  var link_text=document.getElementById("link_text");
+  var mobile_button_and_link=document.getElementById("mobile_button_and_link");
   x.style.display="none";
   form.style.display="none";
   toggle.style.display="none";
   one_button.style.display="none";
   overlay.style.display="none";
+  button_and_link.style.display="none";
+  link_text.style.display="none";
+  mobile_button_and_link.style.display="none";
 }
 function myFunction() {
   document.cookie="acceptCookies=1; path=/; ";
@@ -267,7 +309,7 @@ function getCookie(cname) {
     <div class="overlay-content">
     </div>
   </div>
-<div class = "content">
+  <div class = "content">
     <h1 style="text-align: center">Trending Stories</h1>
     <div class="row">
       {% for story in stories %}
@@ -281,37 +323,37 @@ function getCookie(cname) {
       {% endfor %}
     </div><center>
     <div id = "notification" class ="cookie-banner-container">
-      <span class="close" onclick="myClose()"> ✕ </span>
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span>
       <p id="text" style="font-size:12px;">
         California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
       </p>
-      <button style="min-width: 315px" type="button" id="button1" onclick="myFunction(), logEvent('click', 'button1_accept_cookies');">
+      <button style="min-width: 315px" type="button" id="button1" onclick="myFunction(), logEvent('click', 'button_accept_cookies');">
         Accept cookies
       </button>
-      <button style="min-width: 315px" type="button" id="button2"  onclick="myFunction(), logEvent('click', 'button2_do_not_sell');">
+      <button style="min-width: 315px" type="button" id="button2"  onclick="myFunction(), logEvent('click', 'button_do_not_sell');">
         Do not sell my information
       </button>
       </center>
     </div>
     <div id= "form" class="cookie-banner-container" style="z-index: 1000;">
-      <span class="close" onclick= "myClose()"> ✕ </span>
+      <span class="close" onclick= "myClose(), logEvent('click', 'button_x_form');"> ✕ </span>
       <center><b style="font-size: 24px;">California Consumer Privacy Opt-Out provision (Act)</b></center>
-      <p>By submitting this request you are exercising your right to Opt Out of sale of your personal information. To learn more about what kinds of information we gather in connection with this website and/or its associated services, please consult our <a target="_blank" href="/privacypolicy/" class = "link_in_text" onclick="logBeacon('click', 'link_privacy_policy')">Privacy Policy</a></p>
+      <p>By submitting this request you are exercising your right to Opt Out of sale of your personal information. To learn more about what kinds of information we gather in connection with this website and/or its associated services, please consult our <a target="_blank" href="/privacypolicy/" class = "link_in_text" onclick="logBeacon('click', 'form_privacy_policy')">Privacy Policy</a></p>
       <label for="fname">Email:</label>
-      <input id="form_input" type="text" id="fname" name="fname" value=""><br>
+      <input type="text" id="form_input" name="fname" value=""><br>
       <br>
       <label for="yes_no_radio">Are you a California resident?</label>
-      <p> <input style="font-size: 12px;" type="radio" name="yes_no">Yes</input></p>
-      <p><input style="font-size: 12px;" type="radio" name="yes_no">No</input></p>
-      <center><button style="display:block" type="button" onclick="myClose()">
+      <p> <input style="font-size: 12px;" type="radio" name="yes_no" value="ca_resident_yes">Yes</input></p>
+      <p><input style="font-size: 12px;" type="radio" name="yes_no" value="ca_resident_no">No</input></p>
+      <center><button style="display:block" type="button" onclick="myClose(), logEvent('click', 'submit_form'), logEvent('form_input', checkValidEmail(document.getElementById('form_input').value)), logEvent('form_input', getRadioInput('yes_no'));">
         Submit response
       </button>
       </center>
     </div>
     <div id="toggle" class="cookie-banner-container" style="z-index: 1000;">
-      <span class="close" onclick="myClose()"> ✕ </span>
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x_toggle');"> ✕ </span>
       <p id="text">
-        California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising. You can opt out of the sale of your personal information for each purpose through the toggles below.  You can find out more in our privacy policy at the bottom of any page.
+        California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, show personalized advertising, and connect to social media. You can opt out of the sale of your personal information for each purpose through changing its corresponding toggle to the left.  You can find out more in our privacy policy at the bottom of any page.
       </p>
       <table>
         <tr>
@@ -319,7 +361,7 @@ function getCookie(cname) {
             Personalized Advertising
           </td>
           <td>
-            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_personalized_advertising');"><span class="slider"></span></label>
           </td>
         </tr>
         <tr>
@@ -327,7 +369,7 @@ function getCookie(cname) {
             Analytics
           </td>
           <td>
-            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_analytics');"><span class="slider"></span></label>
           </td>
         </tr>
         <tr>
@@ -335,22 +377,58 @@ function getCookie(cname) {
             Social Media
           </td>
           <td>
-            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_social_media');"><span class="slider"></span></label>
           </td>
         </tr>
       </table>
-      <center><button style="display:block" type="button" id="button0" onclick="myClose()">
+      <center><button style="display:block" type="button" onclick="myClose(), logEvent('click', 'button_submit_response');">
         Submit response
       </button></center>  
     </div>
     <div id="one_button" class="cookie-banner-container">
-      <span class="close" onclick="myClose()"> ✕ </span><center>
-        <b>Privacy Notice</b><br>
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span><center>
         California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
-      <button style="display:block" type="button" id="button0" onclick="myClose()">
+      <button style="display:block" type="button" onclick="myClose(), logEvent('click', 'button_do_not_sell');">
         Do Not Sell My Information
       </button></center>  
     </div>
+    <div id="button_and_link" class="cookie-banner-container">
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span>
+        <table>
+          <tr>
+            <td>
+              <p id="text" style="font-size:12px;">
+                California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
+                </p>
+            </td>
+            <td style="width:220px; padding: 0 15px;">
+              <button style="display:block;" type="button"  onclick="myClose(), logEvent('click', 'button_accept_cookies');">
+                Accept Cookies
+              </button>
+            </td>
+            <td style="width:200px; padding: 0 15px;">
+              <a class="policy" onclick="myToggle(), logEvent('click', 'button_do_not_sell');">Do Not Sell My Information</a>
+            </td>
+          </tr>
+        </table> 
+    </div>
+    <div id="link_text" class="cookie-banner-container">
+      <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span><center>
+        California Residents have certain rights with regard to the sale of personal information to third parties.  We use information collected through cookies or in other forms to improve experience on our site and pages, show personalized advertising, and connect to social media. <a id="link_in_text" class="policy" style="text-decoration: underline;"onclick="myToggle(), logEvent('click', 'button_do_not_sell');">More Information</a>
+      <button style="display:block" type="button" onclick="myClose(), logEvent('click', 'button_accept_cookies');">
+        Accept Cookies
+      </button></center>
+    </div>
+      <div id="mobile_button_and_link" class="cookie-banner-container"><center>
+        <span class="close" onclick="myClose(), logEvent('click', 'button_x');"> ✕ </span>
+          <p id="text" style="font-size:12px;">
+            California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising.  At any point, you can opt out of the sale of all of your personal information by pressing "Do not sell my personal information". You can find out more in our privacy policy at the bottom of any page.
+          </p>
+          <button style="display:block;" type="button"  onclick="myClose(), logEvent('click', 'button_accept_cookies');">
+            Accept Cookies
+          </button>
+          <a class="policy" onclick="myToggle(), logEvent('click', 'button_do_not_sell');">Do Not Sell My Information</a></center>
+      </div>
 </div>
 <div class="footer">
   <p><a target="_blank" href="/privacypolicy/" onclick="logBeacon('click', 'link_privacy_policy')">Privacy Policy</a> &nbsp; &nbsp;&nbsp; <a class="policy" onclick="linkClicked(), logEvent('click', 'link_do_not_sell');">Do Not Sell My Personal Information</a></p>

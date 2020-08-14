@@ -138,6 +138,7 @@ function determine_layout() {
       x.style.display="none";
       link_in_text.setAttribute("onClick", "javascript: myMobileToggle(), logEvent('click', 'button_do_not_sell');");
       link_text.style.bottom=screenHeight;
+      link_text.style.maxWidth="310px";
       link_text.style.left="10px";
       link_text.style.right="10px";
     }
