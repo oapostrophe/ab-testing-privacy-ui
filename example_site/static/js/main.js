@@ -33,7 +33,6 @@ function determine_layout() {
   var mobile_button_and_link=document.getElementById("mobile_button_and_link");
   var link_in_text=document.getElementById("link_in_text");
   ///form.style.display="none";
-
   x.style.display="block";
   if (String(acceptCookies)=="1"){
     return;
@@ -131,13 +130,13 @@ function determine_layout() {
       x.style.display="none";
       mobile_button_and_link.style.bottom=screenHeight;
       mobile_button_and_link.style.maxWidth="275px";
-      link_choice.setAttribute("onClick", "javascript: myMobileToggle();");
+      link_choice.setAttribute("onClick", "javascript: myMobileToggle(), logEvent('click', 'button_do_not_sell');");
       mobile_button_and_link.style.left="24px";
       mobile_button_and_link.style.right="24px";
     }
     else if (String(mobileLayout)=="7"){
       x.style.display="none";
-      link_in_text.setAttribute("onClick", "javascript: myMobileToggle();");
+      link_in_text.setAttribute("onClick", "javascript: myMobileToggle(), logEvent('click', 'button_do_not_sell');");
       link_text.style.bottom=screenHeight;
       link_text.style.left="10px";
       link_text.style.right="10px";
