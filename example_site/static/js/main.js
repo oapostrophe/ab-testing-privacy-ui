@@ -32,11 +32,14 @@ function determine_layout() {
   var link_text=document.getElementById("link_text");
   var mobile_button_and_link=document.getElementById("mobile_button_and_link");
   var link_in_text=document.getElementById("link_in_text");
+  var toggle_table=document.getElementById("toggle_table");
+  var toggle_table_b=document.getElementById("toggle_table_b");
   ///form.style.display="none";
   x.style.display="block";
-  if (String(acceptCookies)=="1"){
-    return;
-  }
+  ///if (String(acceptCookies)=="1"){
+    ///return;
+  ///}
+  desktopLayout=5;
   if (mobile == false){
     x.style.left = "24px";
     x.style.right="24px";
@@ -56,19 +59,23 @@ function determine_layout() {
       button2.setAttribute("onClick", "javascript: myForm(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(desktopLayout) == "3"){
+      toggle_table_b.style.display="none";
       button2.setAttribute("onClick", "javascript: myToggle(), logEvent('click', 'button_do_not_sell');");
     }
     else if (String(desktopLayout) == "4"){
       x.style.display="none";
-      var screenHeight=String(window.innerHeight -530)+"px";
-      toggle.style.bottom=screenHeight;
-      toggle.style.left = "";
+      bannerScreenHeight=String(window.innerHeight-280)+"px";
+      toggle.style.bottom=bannerScreenHeight;
+      toggle.style.maxWidth=screenWidthString;
+      toggle_table.style.display="none";
+      toggle.style.left = "24";
       toggle.style.right="24px";
     }
     else if (String(desktopLayout) == "5"){
       x.style.display="none";
-      one_button.style.bottom=screenHeight;
-      one_button.style.left="";
+      one_button.style.bottom=bannerScreenHeight;
+      one_button.style.maxWidth=screenWidthString;
+      one_button.style.left="10px";
       one_button.style.right="10px";
     }
     else if (String(desktopLayout)=="6"){
@@ -109,12 +116,13 @@ function determine_layout() {
       one_button.style.display="none";
     }
     else if (String(mobileLayout)=="3"){
+      toggle_table_b.style.display="none";
       button2.setAttribute("onClick", "javascript: myMobileToggle(), logEvent('click', 'button_do_not_sell');");
-
     }
     else if (String(mobileLayout)=="4"){
       x.style.display="none";
       var screenHeight=String(window.innerHeight -600)+"px";
+      toggle_table_b.style.display="none";
       toggle.style.bottom=screenHeight;
       toggle.style.left = "";
       toggle.style.right="24px";

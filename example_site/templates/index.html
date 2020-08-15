@@ -61,14 +61,35 @@
       <span class="close" onclick="myClose(), logEvent('click', 'button_x_toggle');"> ✕ </span>
       <p id="text">
         California residents have certain rights with regard to the sale of personal information to third parties. We use information collected through cookies or in other forms to improve experience on our site and pages, analyze how it is used and show personalized advertising. You can opt out of the sale of your personal information for each purpose through changing its corresponding toggle to the left.  You can find out more in our <a target="_blank" href="/privacypolicy/" onclick="logBeacon('click', 'link_privacy_policy');" class="link_in_text">Privacy Policy</a>.
-      </p>
-      <table>
+      </p><center>
+      <table id="toggle_table_b">
+        <tr>
+          <td style="padding: 0 20px;">
+            Personalized Advertising
+          </td>
+          <td>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_personalized_advertising');"><span class="slider round"></span></label>
+          </td>
+          <td style="padding: 0 20px;">
+            Analytics
+          </td>
+          <td>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_analytics');"><span class="slider round"></span></label>
+          </td>
+          <td style="padding: 0 20px;">
+            Content Personalization
+          </td>
+          <td>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_social_media');"><span class="slider round"></span></label>
+          </td>
+      </table></center>
+      <table id="toggle_table">
         <tr>
           <td>
             Personalized Advertising
           </td>
           <td>
-            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_personalized_advertising');"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_personalized_advertising');"><span class="slider round"></span></label>
           </td>
         </tr>
         <tr>
@@ -76,7 +97,7 @@
             Analytics
           </td>
           <td>
-            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_analytics');"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_analytics');"><span class="slider round"></span></label>
           </td>
         </tr>
         <tr>
@@ -84,7 +105,7 @@
             Content Personalization
           </td>
           <td>
-            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_social_media');"><span class="slider"></span></label>
+            <label class="switch"><input type="checkbox" checked onclick="logEvent('click', 'slider_social_media');"><span class="slider round"></span></label>
           </td>
         </tr>
       </table>
