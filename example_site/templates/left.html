@@ -42,10 +42,9 @@ function determine_layout() {
   var toggle_table_b=document.getElementById("toggle_table_b");
   ///form.style.display="none";
   x.style.display="block";
-  ///if (String(acceptCookies)=="1"){
-    ///return;
-  ///}
-  desktopLayout=5;
+  if (String(acceptCookies)=="1"){
+    return;
+  }
   if (mobile == false){
     x.style.left = "24px";
     x.style.right="24px";
