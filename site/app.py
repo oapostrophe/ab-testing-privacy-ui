@@ -1,4 +1,9 @@
-"""Basic webapp to display top news stories with NewsAPI"""
+"""
+Backend for site studying CCPA opt-out designs.  Simulates a typical news
+website by aggregating top news stories from various sources and grouping them
+by political leaning.  Site also randomly assigns users an experiment 
+condition, shows a corresponding CCPA opt-out, and logs user interactions.
+"""
 
 from flask import Flask, render_template, redirect, request, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -190,6 +195,7 @@ def index():
         user_id = str(request.remote_addr)[2:-1]
         user_id = user_id.encode()
         user_id = hashlib.sha256(user_id).hexdigest()
+
         desktop_layout = (int(user_id[0:10], 16) % 6)
         mobile_layout = desktop_layout
 

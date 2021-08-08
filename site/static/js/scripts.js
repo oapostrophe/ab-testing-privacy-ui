@@ -6,7 +6,7 @@ instead.
 :param eventType: (str) - Type of event to log, currently used values are 
 "page_load", "page_unload", "page_blur", "page_focus", "survey_id" and "click."
 :param elementId: (str) Optional element_id, currently used for "click" 
-events to identify what was clicked on. Default value "na"  */
+events to identify what was clicked on.  */
 function logEvent(eventType, elementId="na") {
   // Send POST request to backend
   fetch(`${window.location}`, {
@@ -22,8 +22,8 @@ function logEvent(eventType, elementId="na") {
 /* Use if logging an event that will trigger the page unloading, such as
 clicking on a link or closing the page.  Logs event using navigator.sendBeacon,
 which will send without waiting for a response and thus complete even if the
-page unloads.  Avoid using when not necessary due to possible unreliability
-of the beacon API.
+page unloads.  Avoid using when not necessary due to unreliability of the
+beacon API.
 
 :param eventType: (str) - See documentation for logEvent above
 :param elementId: (str) See documentation for logEvent above  */
@@ -100,28 +100,26 @@ function checkValidEmail(email)
   return "invalid_email";
 }
 
-/* Script setting event listeners to log various page events.  The following
+/* Set event listeners to log various page events.  The following
  DOM events are recorded with the corresponding event types:
 
  window.load - "window_load"
  document.visibilitychange / document.focus / document.blur /
- window.focus / window.blur - "page_blur" or "page_focus" (each time the page
-  comes into or out of visibility, the corresponding value is only logged once)
+ window.focus / window.blur - "page_blur" or "page_focus" 
 
  Additionally, a timer attempts to log a "page_active" event 
- every 1 second.  This catches issues where page closing is not always recorded,
+ every 1 second.  This catches issues where page closing is not always recorded
  mostly on iOS.
-
  */
 
-// Listener for page load
 window.addEventListener("load", function(){
   logBeacon("window_load")});
 
 // Log every 1 second while page is active
 window.setInterval(function(){logEvent("page_active");}, 1000);
 
-// Script to log focus changes
+// Script to log visibility changes adapted from: 
+// https://stereologics.wordpress.com/2015/04/02/about-page-visibility-api-hidden-visibilitychange-visibilitystate/
 var browserPrefixes = ['moz', 'ms', 'o', 'webkit'],
 isVisible = true; // internal flag, defaults to true
 
