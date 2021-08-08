@@ -2,7 +2,7 @@
 [![A 67-second demo of the website](images/preview.png)](https://www.youtube.com/watch?v=270LdQcHkQ4)
 
 ## Study Background:
-[Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study
+[Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study  
 [Full study tech report](https://arxiv.org/abs/2009.07884)
 
 ## Project Overview:
