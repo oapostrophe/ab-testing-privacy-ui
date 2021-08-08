@@ -3,11 +3,10 @@
 
 ## Study Background:
 [Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study  
-[Full study tech report](https://arxiv.org/abs/2009.07884)
+[Full study](https://arxiv.org/abs/2009.07884) tech report
 
 ## Project Overview:
 This is a simple website designed to study user interaction with California Consumer Privacy Act "Do Not Sell My Information" notices, and the effect of user interface design on this interaction.  It deployed to ~4,300 users in a summer 2020 study at Pomona College's Privacy and Security lab.  The site was jointly developed by Sean O'Connor (who built the backend and Javascript event logging code), Ryan Nurwono (who developed the rest of the site front-end), and Eleanor Birrell.
-
 
 The website displays top news stories from a variety of sources across the US political spectrum, as well as international media outlets.  It also displays a random design of CCPA notice based on a hash of the user's IP address.  User interactions with the website are logged under a pseudonymized uniqueId.
 
@@ -57,14 +56,14 @@ If the screen width is less than 500, this is set to "true" and the CCPA banner 
 
 
 ## Guide to source files:
-app.py - back-end Flask server functionality
-static/js/scripts.js - front end javascript to log user interaction
-static/js/main.js - javascript displaying CCPA notice
-templates/base.html - base HTML template
-templates/index.html - homepage displaying all news stories
-templates/center.html - page filtering stories from centrist sources
-templates/left.html - page filtering stories from left-leaning sources
-templates/right.html - page filtering stories from right-leaning sources
-templates/international.html - page filtering stories from international sources
-templates/privacypolicy.html - page with study privacy disclosures and option to opt-out
-templates/optout.html - page indicating user has successfully opted out of the study.
+app.py - back-end Flask server functionality  
+static/js/scripts.js - front end javascript to log user interaction  
+static/js/main.js - javascript displaying CCPA notice  
+templates/base.html - base HTML template  
+templates/index.html - homepage displaying all news stories  
+templates/center.html - page filtering stories from centrist sources  
+templates/left.html - page filtering stories from left-leaning sources  
+templates/right.html - page filtering stories from right-leaning sources  
+templates/international.html - page filtering stories from international sources  
+templates/privacypolicy.html - page with study privacy disclosures and option to opt-out  
+templates/optout.html - page indicating user has successfully opted out of the study.  
