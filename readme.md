@@ -1,8 +1,8 @@
 ## Study Background:
 To learn about this project, check out the following:
-[One-minute site demo](https://www.youtube.com/watch?v=270LdQcHkQ4)
-[Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study  
-[Full study](https://arxiv.org/abs/2009.07884) tech report
+[One-minute site demo](https://www.youtube.com/watch?v=270LdQcHkQ4)  
+[Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study   
+[Full study](https://arxiv.org/abs/2009.07884) tech report  
 
 ## Project Overview:
 This is a simple website designed to study user interaction with California Consumer Privacy Act "Do Not Sell My Information" notices, and the effect of user interface design on this interaction.  It deployed to ~4,300 users in a summer 2020 study at Pomona College's Privacy and Security lab.  The site was jointly developed by Sean O'Connor (who built the backend and Javascript event logging code), Ryan Nurwono (who developed the rest of the site front-end), and Eleanor Birrell.
