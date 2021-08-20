@@ -1,15 +1,15 @@
-## Study Background:
-To learn about this project, check out the following:
+## Information
+To learn about this project, check out the following:  
 [One-minute site demo](https://www.youtube.com/watch?v=270LdQcHkQ4)  
 [Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study   
 [Full study](https://arxiv.org/abs/2009.07884) tech report  
 
-## Project Overview:
+## Project Overview
 This is a simple website designed to study user interaction with California Consumer Privacy Act "Do Not Sell My Information" notices, and the effect of user interface design on this interaction.  It deployed to ~4,300 users in a summer 2020 study at Pomona College's Privacy and Security lab.  The site was jointly developed by Sean O'Connor (who built the backend and Javascript event logging code), Ryan Nurwono (who developed the rest of the site front-end), and Eleanor Birrell.
 
 The website displays top news stories from a variety of sources across the US political spectrum, as well as international media outlets.  It also displays a random design of CCPA notice based on a hash of the user's IP address.  User interactions with the website are logged under a pseudonymized uniqueId.
 
-## Set-up:
+## Set-up
 1. Install required python packages.  A list of dependencies can be found in "requirements.txt"; all are available through PIP.
 2. Initialize the SQL database tables.  Do this by running a python shell in the example_site directory, then run the following commands:
 	```python
@@ -23,7 +23,7 @@ The website displays top news stories from a variety of sources across the US po
 	Otherwise all events will be logged in the python console.
 4. Visit the site at the URL listed in the console.
 
-## Data logging:
+## Data logging
 Data is logged in a csv-friendly format.  One line will be logged for each event detected by the server.  Here's an example:
 
 "d597f4b582f52fccf9aa021885419e3d1c08a7195aeac10b7efa64cca584422a","http://localhost:5000/","1594851366.6","window_load","na","2","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0","false",
@@ -54,7 +54,7 @@ information.
 If the screen width is less than 500, this is set to "true" and the CCPA banner style is chosen from the mobile list instead of desktop.
 
 
-## Guide to source files:
+## Guide to source files
 app.py - back-end Flask server functionality  
 static/js/scripts.js - front end javascript to log user interaction  
 static/js/main.js - javascript displaying CCPA notice  
