@@ -1,4 +1,3 @@
-## Information
 To learn about this project, check out the following:  
 [One-minute site demo](https://www.youtube.com/watch?v=270LdQcHkQ4)  
 [Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study   
