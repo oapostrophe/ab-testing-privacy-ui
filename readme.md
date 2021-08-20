@@ -1,7 +1,6 @@
-## One minute site demo:
-[![A 67-second demo of the website](images/preview.png)](https://www.youtube.com/watch?v=270LdQcHkQ4)
-
 ## Study Background:
+To learn about this project, check out the following:
+[One-minute site demo](https://www.youtube.com/watch?v=270LdQcHkQ4)
 [Blog Post](https://oapostrophe.github.io/ccpa-study/) summarizing our study  
 [Full study](https://arxiv.org/abs/2009.07884) tech report
 
